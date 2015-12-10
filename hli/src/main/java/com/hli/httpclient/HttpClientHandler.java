@@ -26,20 +26,11 @@ import io.netty.handler.timeout.WriteTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Sharable
 public class HttpClientHandler extends SimpleChannelInboundHandler<HttpObject> {
 	private Logger log;
-	private Logger callLog;
 	
-	private HttpAdaptorImpl adaptor;
-	
-	public HttpClientHandler(HttpAdaptorImpl adaptor) {
-		this.adaptor = adaptor;
-		
-		this.usage = UsageWrapper.getInstance();
-		
-    	log = LoggerFactory.getLogger(adaptor.getAdaptorName());
-    	callLog = LoggerFactory.getLogger(adaptor.getAdaptorName()+"_CALLLOG");
+	public HttpClientHandler() {
+    	log = LoggerFactory.getLogger(HttpClient.class);
 	}
 	
     @Override
@@ -54,13 +45,8 @@ public class HttpClientHandler extends SimpleChannelInboundHandler<HttpObject> {
     			HTTPResponseMessage responseMessage = new HTTPResponseMessage(response);
     			call.setResponseMessage(responseMessage);
     			
-    			callLog.debug("[RECV HTTP RESPONSE] callId={}\n{}", call.getCallID(), responseMessage);
-    			
-    			usage.responseIncrement(UsageWrapper.RECV, call.getServiceID().getName(), response.getStatus().code());
-    			
     			adaptor.dispatchCall(call);
     		} else {
-    			usage.responseIncrement(UsageWrapper.RECV, UsageWrapper.UNKNOWN_SERVICE_NAME, response.getStatus().code());
     			
     			log.error("[RESTAdaptorImpl.receivedResponseMessage()] Call Not found....");
     		}
@@ -73,10 +59,8 @@ public class HttpClientHandler extends SimpleChannelInboundHandler<HttpObject> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     	if(cause instanceof ReadTimeoutException) { 
 			log.error("[HttpClientHandler.exceptionCaught()] ReadTimeout. channel={}", ctx.channel());
-			adaptor.clientExceptionCaughted(ctx, cause, 0, "ReadTimeout.");
 		} else if(cause instanceof WriteTimeoutException) {
 			log.error("[HttpClientHandler.exceptionCaught()] WriteTimeout. channel={}", ctx.channel());
-			adaptor.clientExceptionCaughted(ctx, cause, 0, "WriteTimeout.");
 		} else {
 			log.error("[HttpClientHandler.exceptionCaught()] Exception! cause={}", cause.getMessage(), cause);
 		}

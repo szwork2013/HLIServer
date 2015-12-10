@@ -47,28 +47,23 @@ public class HttpClient {
 	private String keystoreFilePath = "";
 	private String keystorePassword = "";
 	
-    public HttpClient(boolean ssl, HttpClientHandler handler, HttpAdaptorImpl adaptor) {
-    	initialize(ssl, handler, adaptor);
+    public HttpClient(boolean ssl, HttpClientHandler handler) {
+    	initialize(ssl, handler);
     }
     
-    public HttpClient(boolean ssl, HttpClientHandler handler, HttpAdaptorImpl adaptor, 
+    public HttpClient(boolean ssl, HttpClientHandler handler, 
     		boolean keystoreUsingFile, String keystoreFilePath, String keystorePassword) {
     	this.keystoreUsingFile = keystoreUsingFile;
     	this.keystoreFilePath = keystoreFilePath;
     	this.keystorePassword = keystorePassword;
     	
-    	initialize(ssl, handler, adaptor);
+    	initialize(ssl, handler);
     }
     
-    public void initialize(boolean ssl, HttpClientHandler handler, HttpAdaptorImpl adaptor) {
-    	log = LoggerFactory.getLogger(adaptor.getAdaptorName());
-    	callLog = LoggerFactory.getLogger(adaptor.getAdaptorName()+"_CALLLOG");
-    	
-    	this.usage = UsageWrapper.getInstance();
-    	
+    public void initialize(boolean ssl, HttpClientHandler handler) {
     	this.ssl = ssl;
     	
-    	group = new NioEventLoopGroup(adaptor.getClientLoopGroupSize());
+    	group = new NioEventLoopGroup(1);
     	
 		bootStrap = new Bootstrap();
 		
@@ -132,8 +127,6 @@ public class HttpClient {
         
         log.debug("[HTTPClient.sendRequest()] Send Request. URI={}\n{}", uri, request);
     	callLog.debug("[SEND HTTP REQUEST] callId={}\n{}", call.getCallID(), call.getHttpRequest());
-    	
-    	usage.requestIncrement(UsageWrapper.SEND, call.getServiceID().getName(), request.getMethod().name());
     	
     	// Send HTTP Request Message
         ch.writeAndFlush(request);
