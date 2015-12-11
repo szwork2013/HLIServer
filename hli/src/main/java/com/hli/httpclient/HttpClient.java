@@ -23,6 +23,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 
 import java.net.URI;
@@ -36,7 +37,6 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpClient {
 	private Logger log;
-	private Logger callLog;
 	
 	private EventLoopGroup group;
 	private Bootstrap bootStrap; 
@@ -48,6 +48,7 @@ public class HttpClient {
 	private String keystorePassword = "";
 	
     public HttpClient(boolean ssl, HttpClientHandler handler) {
+    	log = LoggerFactory.getLogger(HttpClient.class);
     	initialize(ssl, handler);
     }
     
@@ -70,11 +71,11 @@ public class HttpClient {
 		bootStrap.group(group)
 	     .channel(NioSocketChannel.class);
 	    
-		if(keystoreUsingFile) {
-			bootStrap.handler(new HttpClientInitializer(ssl, handler, keystoreFilePath, keystorePassword));
-		} else {
+//		if(keystoreUsingFile) {
+//			bootStrap.handler(new HttpClientInitializer(ssl, handler, keystoreFilePath, keystorePassword));
+//		} else {
 			bootStrap.handler(new HttpClientInitializer(ssl, handler));
-		}
+//		}
 		
 		bootStrap.option(ChannelOption.SO_KEEPALIVE, true);
     }
@@ -84,9 +85,8 @@ public class HttpClient {
     	group.shutdownGracefully();
     }
     
-    public Channel sendRequest(SendRequestCallImpl call, int connectTimeout) throws Exception {
-    	URI uri = call.getHttpRequest().getURI();
-    	DefaultFullHttpRequest request = call.getHttpRequest().getDefaultFullHttpRequest();
+    public Channel sendRequest(FullHttpRequest request, String url) throws Exception {
+    	URI uri = new URI(url);
     	
         String scheme = uri.getScheme() == null? "http" : uri.getScheme();
         String host = uri.getHost() == null? "localhost" : uri.getHost();
@@ -114,9 +114,7 @@ public class HttpClient {
         }
         
         // set Connect Timeout
-        bootStrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeout);
-        // XXX Socket Timeout 따로걸어야하나...?
-        bootStrap.option(ChannelOption.SO_TIMEOUT, connectTimeout);
+        bootStrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
         
         // 헤더에 HOST 추가
         request.headers().set(HttpHeaders.Names.HOST, host);
@@ -126,12 +124,10 @@ public class HttpClient {
         Channel ch = cf.channel();
         
         log.debug("[HTTPClient.sendRequest()] Send Request. URI={}\n{}", uri, request);
-    	callLog.debug("[SEND HTTP REQUEST] callId={}\n{}", call.getCallID(), call.getHttpRequest());
     	
     	// Send HTTP Request Message
         ch.writeAndFlush(request);
-        
-        call.setIsSendRequest(true);
+
         
         return ch;
     }

@@ -15,56 +15,24 @@
  */
 package com.hli.httpclient;
 
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.HttpObject;
-import io.netty.handler.timeout.ReadTimeoutException;
-import io.netty.handler.timeout.WriteTimeoutException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HttpClientHandler extends SimpleChannelInboundHandler<HttpObject> {
-	private Logger log;
+	private OnReceiveListener listener;
 	
-	public HttpClientHandler() {
-    	log = LoggerFactory.getLogger(HttpClient.class);
+	public HttpClientHandler(OnReceiveListener listener) {
+    	this.listener = listener;
 	}
 	
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-    	if(msg instanceof DefaultFullHttpResponse) {
-    		DefaultFullHttpResponse response = (DefaultFullHttpResponse) msg;
-    		log.debug("[HttpClientHandler.channelRead0()] Response Message Received. \n"+response);
-    		
-    		// channel로 콜 찾아서 리스너로 Dispatch
-    		SendRequestCallImpl call = adaptor.getRequestChannelTable().remove(ctx.channel());
-    		if(call != null) {
-    			HTTPResponseMessage responseMessage = new HTTPResponseMessage(response);
-    			call.setResponseMessage(responseMessage);
-    			
-    			adaptor.dispatchCall(call);
-    		} else {
-    			
-    			log.error("[RESTAdaptorImpl.receivedResponseMessage()] Call Not found....");
-    		}
-    	} else {
-    		log.error("[HttpClientHandler.channelRead0()] Not Supported Message Received. \n"+msg);
-    	}
+    	listener.channelRead0(ctx, msg);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-    	if(cause instanceof ReadTimeoutException) { 
-			log.error("[HttpClientHandler.exceptionCaught()] ReadTimeout. channel={}", ctx.channel());
-		} else if(cause instanceof WriteTimeoutException) {
-			log.error("[HttpClientHandler.exceptionCaught()] WriteTimeout. channel={}", ctx.channel());
-		} else {
-			log.error("[HttpClientHandler.exceptionCaught()] Exception! cause={}", cause.getMessage(), cause);
-		}
-		
-		ctx.close();
+    	listener.exceptionCaught(ctx, cause);
     }
 }

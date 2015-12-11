@@ -38,15 +38,6 @@ public class HttpClientInitializer extends ChannelInitializer<SocketChannel> {
     public HttpClientInitializer(boolean ssl, HttpClientHandler handler) {
         this.ssl = ssl;
         this.handler = handler;
-        
-        this.sslContext = SslContextFactory.getClientContext();
-    }
-    
-    public HttpClientInitializer(boolean ssl, HttpClientHandler handler, String keystoreFilePath, String keystorePassword) {
-    	this.ssl = ssl;
-        this.handler = handler;
-        
-        this.sslContext = SSLContextMaker.makeClientSSLContext(keystoreFilePath, keystorePassword);
     }
 
     @Override
@@ -57,13 +48,13 @@ public class HttpClientInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("log", new LoggingHandler(LogLevel.INFO));
         
         // Enable HTTPS if necessary.
-        if (ssl) {
-        	SSLEngine engine = sslContext.createSSLEngine();
-        	engine.setUseClientMode(true);
-        	engine.setEnabledCipherSuites(SSLCipherSuits.getEnableCipherSuits());
-            
-            p.addLast("ssl", new SslHandler(engine));
-        }
+//        if (ssl) {
+//        	SSLEngine engine = sslContext.createSSLEngine();
+//        	engine.setUseClientMode(true);
+//        	engine.setEnabledCipherSuites(SSLCipherSuits.getEnableCipherSuits());
+//            
+//            p.addLast("ssl", new SslHandler(engine));
+//        }
 
         p.addLast("codec", new HttpClientCodec());
 
