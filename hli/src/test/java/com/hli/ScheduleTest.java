@@ -9,7 +9,7 @@ public class ScheduleTest {
 	@Test
 	public void productTest() {
 		HttpScheduler schedule = new HttpScheduler();
-		schedule.getProductOfCoup();
+		schedule.getProductOfM12();
 	}
 
 }

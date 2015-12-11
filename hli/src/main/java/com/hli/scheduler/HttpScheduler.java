@@ -1,8 +1,18 @@
 package com.hli.scheduler;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hli.domain.GoodsVO;
 import com.hli.httpclient.HttpClient;
 import com.hli.httpclient.HttpClientHandler;
 import com.hli.httpclient.OnReceiveListener;
@@ -15,10 +25,14 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.QueryStringEncoder;
 import io.netty.util.CharsetUtil;
 
 public class HttpScheduler {
+	private Logger log; 
+	
+	public HttpScheduler() {
+		log = LoggerFactory.getLogger(HttpScheduler.class);
+	}
 	
 	public void getProductOfCoup() {
 		OnReceiveListener listener = new OnReceiveListener() {
@@ -93,7 +107,7 @@ public class HttpScheduler {
 			
 			@Override
 			public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-				if (msg instanceof HttpResponse) {
+				/*if (msg instanceof HttpResponse) {
 					HttpResponse response = (HttpResponse) msg;
 
 					System.err.println("STATUS: " + response.getStatus());
@@ -108,13 +122,44 @@ public class HttpScheduler {
 						}
 						System.err.println();
 					}
-				}
+				}*/
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 
-					System.err.print(content.content().toString(CharsetUtil.UTF_8));
-					System.err.flush();
+					String strContent = content.content().toString(CharsetUtil.UTF_8);
+					log.debug("content:" + strContent);
 
+					try {
+						SAXBuilder builder = new SAXBuilder();
+						Document document = (Document) builder.build(strContent);
+						Element rootNode = document.getRootElement();
+						List list = rootNode.getChildren("ITEM");
+
+						for (int i = 0; i < list.size(); i++) {
+							Element node = (Element) list.get(i);
+							GoodsVO goods = new GoodsVO();
+							
+							goods.setBrand_name(node.getChildText("BRAND_NAME"));
+							goods.setGoods_name(node.getChildText("GOODS_NAME"));
+							goods.setGoods_code(node.getChildText("GOODS_CODE"));
+							goods.setThumbnail(node.getChildText("THUMBNAIL"));
+							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
+							goods.setSell_price(node.getChildText("SELL_PRICE"));
+
+							System.out.println("First Name : " + node.getChildText("BRAND_NAME")); //브랜드명
+							System.out.println("First Name : " + node.getChildText("GOODS_NAME")); //상품명
+							System.out.println("Last Name : " + node.getChildText("GOODS_CODE"));  //상품코드
+							System.out.println("Nick Name : " + node.getChildText("THUMBNAIL"));   //thumbnail
+							System.out.println("Salary : " + node.getChildText("MARKET_PRICE"));   //시장가격
+							System.out.println("Salary : " + node.getChildText("SELL_PRICE"));     //판매가격
+
+						}
+
+					} catch (IOException io) {
+						System.out.println(io.getMessage());
+					} catch (JDOMException jdomex) {
+						System.out.println(jdomex.getMessage());
+					}
 				}
 			}
 		};
@@ -129,7 +174,7 @@ public class HttpScheduler {
 			uri = new URI(url);
 			
 			FullHttpRequest request = new DefaultFullHttpRequest(
-	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
+	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() /*+ "?" + uri.getRawQuery()*/ );
 	        
 			request.headers().set("host", uri.getHost());
 	        request.headers().set("connection", "close");
