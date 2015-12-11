@@ -1,6 +1,9 @@
 package com.hli.scheduler;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -126,12 +129,19 @@ public class HttpScheduler {
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 
-					String strContent = content.content().toString(CharsetUtil.UTF_8);
+					String strContent = content.content().toString();
 					log.debug("content:" + strContent);
+					
+					InputStream in = null;
+					try {
+						in = new ByteArrayInputStream(strContent.getBytes("euc-kr"));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 
 					try {
 						SAXBuilder builder = new SAXBuilder();
-						Document document = (Document) builder.build(strContent);
+						Document document = (Document) builder.build(in);
 						Element rootNode = document.getRootElement();
 						List list = rootNode.getChildren("ITEM");
 
