@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -20,10 +21,13 @@ import com.hli.httpclient.HttpClient;
 import com.hli.httpclient.HttpClientHandler;
 import com.hli.httpclient.OnReceiveListener;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
@@ -84,7 +88,7 @@ public class HttpScheduler {
 			uri = new URI(url);
 			
 			FullHttpRequest request = new DefaultFullHttpRequest(
-	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
+	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() /*+ "?" + uri.getRawQuery()*/ );
 	        
 			request.headers().set("host", uri.getHost());
 	        request.headers().set("connection", "close");
@@ -105,11 +109,13 @@ public class HttpScheduler {
 			@Override
 			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 				cause.printStackTrace();
+				System.err.println("exception");
 		        ctx.close();
 			}
 			
 			@Override
 			public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+				System.err.println("receive");
 				/*if (msg instanceof HttpResponse) {
 					HttpResponse response = (HttpResponse) msg;
 
@@ -126,24 +132,33 @@ public class HttpScheduler {
 						System.err.println();
 					}
 				}*/
+				
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 
-					String strContent = content.content().toString();
-					log.debug("content:" + strContent);
+					ByteBuf buffer = content.content();
+					byte [] array = new byte[buffer.capacity()];
+					for (int i = 0; i < buffer.capacity(); i ++) {
+						array[i] = buffer.getByte(i);
+						//System.out.println((char) array[i]);
+					}
+					
+					String strContent = new String(array, "euc-kr");
+					System.out.println("content:" + strContent);
 					
 					InputStream in = null;
 					try {
 						in = new ByteArrayInputStream(strContent.getBytes("euc-kr"));
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
 					}
-
+					
 					try {
 						SAXBuilder builder = new SAXBuilder();
 						Document document = (Document) builder.build(in);
 						Element rootNode = document.getRootElement();
 						List list = rootNode.getChildren("ITEM");
+						System.out.println("list size()" + list.size());
 
 						for (int i = 0; i < list.size(); i++) {
 							Element node = (Element) list.get(i);
@@ -156,19 +171,21 @@ public class HttpScheduler {
 							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
 
-							System.out.println("First Name : " + node.getChildText("BRAND_NAME")); //브랜드명
-							System.out.println("First Name : " + node.getChildText("GOODS_NAME")); //상품명
-							System.out.println("Last Name : " + node.getChildText("GOODS_CODE"));  //상품코드
-							System.out.println("Nick Name : " + node.getChildText("THUMBNAIL"));   //thumbnail
-							System.out.println("Salary : " + node.getChildText("MARKET_PRICE"));   //시장가격
-							System.out.println("Salary : " + node.getChildText("SELL_PRICE"));     //판매가격
-
+							System.out.println("BRAND_NAME : " + node.getChildText("BRAND_NAME")); //브랜드명
+							System.out.println("GOODS_NAME : " + node.getChildText("GOODS_NAME")); //상품명
+							System.out.println("GOODS_CODE :" + node.getChildText("GOODS_CODE"));  //상품코드
+							System.out.println("THUMBNAIL : " + node.getChildText("THUMBNAIL"));   //thumbnail
+							System.out.println("MARKET_PRICE : " + node.getChildText("MARKET_PRICE"));   //시장가격
+							System.out.println("SELL_PRICE : " + node.getChildText("SELL_PRICE"));     //판매가격
+							System.out.flush();
 						}
 
 					} catch (IOException io) {
 						System.out.println(io.getMessage());
 					} catch (JDOMException jdomex) {
 						System.out.println(jdomex.getMessage());
+					}  catch (Exception e) {
+						System.out.println(e.getMessage());
 					}
 				}
 			}
@@ -184,7 +201,7 @@ public class HttpScheduler {
 			uri = new URI(url);
 			
 			FullHttpRequest request = new DefaultFullHttpRequest(
-	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() /*+ "?" + uri.getRawQuery()*/ );
+	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
 	        
 			request.headers().set("host", uri.getHost());
 	        request.headers().set("connection", "close");

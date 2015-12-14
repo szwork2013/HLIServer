@@ -19,6 +19,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -59,10 +60,10 @@ public class HttpClientInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("codec", new HttpClientCodec());
 
         // Remove the following line if you don't want automatic content decompression.
-//        p.addLast("inflater", new HttpContentDecompressor());
+        p.addLast("inflater", new HttpContentDecompressor());
 
         // Uncomment the following line if you don't want to handle HttpChunks.
-        p.addLast("aggregator", new HttpObjectAggregator(1048576));
+        p.addLast("aggregator", new HttpObjectAggregator(10240000));
 
         p.addLast("handler", handler);
     }
