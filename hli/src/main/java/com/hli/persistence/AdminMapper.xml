@@ -3,38 +3,30 @@
 
 <mapper namespace="com.hli.persistence.AdminMapper">
 
-<insert id="insertUser" parameterType="User">
-	INSERT INTO user(login_id, password, name) values(#{login_id}, #{password}, #{name});
+<insert id="insertGoods" parameterType="GoodsVO">
+	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, cell_price) 
+	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{cell_price});
 </insert>
+
+<update id="updateGoods" parameterType="GoodsVO">
+	UPDATE goods
+	<set>
+		updated = now(),
+		<if test="provider != 0">provider=#{provider},</if>
+		<if test="brand_name != null">brand_name=#{brand_name},</if>
+		<if test="goods_name != null">goods_name=#{goods_name},</if>
+		<if test="goods_code != null">goods_code=#{goods_code},</if>
+		<if test="thumbnail != null">thumbnail=#{thumbnail},</if>
+		<if test="market_price != null">market_price=#{market_price},</if>
+		<if test="cell_price != null">cell_price=#{cell_price}</if>
+	</set>
+	WHERE goods_id = #{goods_id} 
+</update>
 
 <select id="selectUser" parameterType="User" resultType="User">
 	SELECT * FROM user 
 	WHERE login_id = #{login_id} and password = #{password}
 	Limit 1
 </select>
-
-<insert id="insertBoard" parameterType="Board">
-	INSERT INTO 
-		board(user_id, title, content) 
-		values(#{user_id}, #{title}, #{content});
-</insert>
-
-<select id="selectBoardList" resultType="Board">
-	SELECT * FROM board
-</select>
-
-<update id="updateBoard" parameterType="Board">
-	UPDATE board
-	<set>
-		<if test="title != null">title=#{title},</if>
-		<if test="content != null">content=#{content}</if>
-	</set>
-	WHERE board_id = #{board_id} 
-</update>
-
-<delete id="deleteBoard" parameterType="Board">
-	DELETE board
-	where board_id = #{board_id}
-</delete>
 
 </mapper>

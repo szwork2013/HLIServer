@@ -1,5 +1,8 @@
 package com.hli.persistence;
 
-public interface AdminMapper {
+import com.hli.domain.GoodsVO;
 
+public interface AdminMapper {
+	public int insertGoods(GoodsVO goods);
+	public int updateGoods(GoodsVO goods);
 }
