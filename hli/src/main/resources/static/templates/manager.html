@@ -1,0 +1,104 @@
+<div>
+	<div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">사용자 관리</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-list fa-lg"></i> 사용자 목록
+					<div class="pull-right">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="clearAdmin()">관리자추가</button>
+                    </div>
+				</div>
+				<table class="table table-striped">
+					<thead>
+			    		<tr>
+			    			<td>편집</td>
+			    			<td>아이디</td>
+			    			<td>이름</td>
+			    			<td>권한</td>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+					    <tr ng-repeat="admin in admins">
+					    	<td>
+					    		<button class="btn btn-default btn-xs" ng-click="editAdmin(admin)">
+						        	<span class="glyphicon glyphicon-pencil"></span> 수 정
+						        </button>
+						        <button class="btn btn-default btn-xs" ng-click="deleteAdmin(admin)">
+						        	<span class="glyphicon glyphicon-remove-circle"></span> 삭 제
+						        </button>
+						    </td>
+						    <td>{{ admin.id}}</td>
+						    <td>{{ admin.name}}</td>
+						    <td>{{ roles[admin.role_id-1].name}}</td>
+					    </tr>
+					    <tr>
+					    	<td colspan="7" style="text-align:center">
+					    		<pagination boundary-links="true" total-items="totalAdminListCount" ng-model="currentPageAdmin" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="adminListPageChanged()"></pagination>
+					    	</td>
+					    </tr>
+				    </tbody>
+			    </table>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-edit fa-lg"></i> {{admin_mode_text}}
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">아이디</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="id" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">비밀번호</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="pass" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="contentText" class="col-sm-4 control-label">이름</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="name">
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="noti_dateText" class="col-sm-4 control-label">권한</label>
+					    	<div class="col-sm-8">
+					      		<select class="form-control" ng-model="role_id">
+					      			<option value="">Select role-------</option> <!-- not selected / blank option -->
+					      			<option ng-repeat="role in roles" value="{{role.code}}">
+						        		{{role.name}}
+						    		</option>
+					      		</select>
+					    	</div>
+					  	</div>
+					</form> 
+					<div class="row" ng-switch="admin_mode">
+							<div class="col-lg-6" ng-switch-when="edit">
+					      		<button type="button" ng-click="modifyAdmin()" class="btn btn-info btn-block"><i class="fa fa-save fa-lg"></i> Save</button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="edit">
+					      		<button type="button" class="btn btn-info btn-block disabled"><i class="fa fa-plus fa-lg"></i> Add </button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="">
+					      		<button type="button" class="btn btn-info btn-block disabled"><i class="fa fa-save fa-lg"></i> Save</button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="">
+					      		<button type="button" ng-click="addAdmin()" class="btn btn-info btn-block"><i class="fa fa-plus fa-lg"></i> Add </button>
+					    	</div>
+					   	</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>

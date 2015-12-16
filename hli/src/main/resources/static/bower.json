@@ -1,0 +1,22 @@
+{
+  "name": "hli static",
+  "homepage": "https://github.com/eastflag/HLIServer",
+  "authors": [
+    "eastflag <eastflag@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "metisMenu": "~2.2.0",
+    "font-awesome": "~4.5.0"
+  }
+}

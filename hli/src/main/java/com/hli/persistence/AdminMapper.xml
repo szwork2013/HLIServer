@@ -29,4 +29,64 @@
 	Limit 1
 </select>
 
+
+<insert id="insertManager" parameterType="ManagerVO">
+	INSERT INTO manager(id, pass, name, role_id)
+		VALUES(HEX(AES_ENCRYPT(#{id}, 'hlint')), password(#{pass}), HEX(AES_ENCRYPT(#{name}, 'hlint')), #{role_id});
+</insert>
+
+<update id="updateManager" parameterType="ManagerVO">
+	UPDATE manager
+	<set>
+		<if test="id != null">id=HEX(AES_ENCRYPT(#{id}, 'hlint')),</if>
+		<if test="pass != null">pass=password(#{pass}),</if>
+		<if test="name != null">name=HEX(AES_ENCRYPT(#{name}, 'hlint')),</if>
+		<if test="role_id != 0">role_id=#{role_id}</if>
+	</set>
+	WHERE manager_id = #{manager_id}
+</update>
+
+<delete id="deleteManager" parameterType="ManagerVO">
+	DELETE FROM manager
+	WHERE manager_id = #{manager_id}
+</delete>
+
+<select id="countManager" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM manager
+</select>
+
+<select id="selectManager" parameterType="ManagerVO" resultType="ManagerVO">
+	SELECT 
+		manager_id,
+		CAST(AES_DECRYPT(unhex(id), 'hlint') AS CHAR(100)) as 'id',
+		pass,
+		CAST(AES_DECRYPT(unhex(name), 'hlint') AS CHAR(100)) as 'name',
+		role_id 
+	FROM manager
+	WHERE  
+		 <choose>
+		 	<when test="manager_id == 0">
+		 		id=HEX(AES_ENCRYPT(#{id}, 'hlint')) AND pass=password(#{pass})	
+		 	</when>
+		 	<otherwise>
+		 		manager_id=#{manager_id}
+		 	</otherwise>
+		 </choose>
+	Limit 1
+</select>
+
+<select id="selectManagerList" parameterType="SearchVO" resultType="ManagerVO">
+	SELECT 
+		manager_id,
+		CAST(AES_DECRYPT(unhex(id), 'hlint') AS CHAR(20)) as 'id',
+		pass,
+		CAST(AES_DECRYPT(unhex(name), 'hlint') AS CHAR(20)) as 'name',
+		role_id
+	FROM manager
+	ORDER BY name
+	<if test="page_size != 0">
+		LIMIT #{start_index}, #{page_size}
+	</if>
+</select>
+
 </mapper>

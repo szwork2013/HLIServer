@@ -1,9 +1,14 @@
 package com.hli.service;
 
+import java.util.List;
+
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hli.domain.GoodsVO;
+import com.hli.domain.ManagerVO;
+import com.hli.domain.SearchVO;
 import com.hli.persistence.AdminMapper;
 
 @Service
@@ -39,6 +44,37 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public GoodsVO getGoods(GoodsVO goods) {
 		return adminMapper.selectGoods(goods);
+	}
+	
+	
+	@Override
+	public long addManager(ManagerVO manager) throws PersistenceException {
+		return adminMapper.insertManager(manager);
+	}
+
+	@Override
+	public long modifyManager(ManagerVO manager) throws PersistenceException {
+		return adminMapper.updateManager(manager);
+	}
+
+	@Override
+	public long removeManager(ManagerVO manager) throws PersistenceException {
+		return adminMapper.deleteManager(manager);
+	}
+
+	@Override
+	public int countManager(SearchVO search) {
+		return adminMapper.countManager(search);
+	}
+
+	@Override
+	public ManagerVO getManager(ManagerVO manager) {
+		return adminMapper.selectManager(manager);
+	}
+
+	@Override
+	public List<ManagerVO> getManagerList(SearchVO search) {
+		return adminMapper.selectManagerList(search);
 	}
 
 }
