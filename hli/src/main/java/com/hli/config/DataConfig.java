@@ -17,7 +17,7 @@ public class DataConfig {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
 		dataSource.setUsername("root");
-		dataSource.setUrl("jdbc:mysql://localhost/hlidb");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/hlidb");
 		dataSource.setPassword("hli1234");
 
 		return dataSource;
