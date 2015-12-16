@@ -23,9 +23,22 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int saveGoods(GoodsVO goods) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void saveGoods(GoodsVO inGoods) {
+		System.out.println("saveGoods:" + inGoods.getGoods_code());
+		GoodsVO goods = getGoods(inGoods);
+		if(goods == null) {
+			//insert
+			adminMapper.insertGoods(inGoods);
+		} else {
+			//update
+			inGoods.setGoods_id(goods.getGoods_id());
+			adminMapper.updateGoods(goods);
+		}
+	}
+
+	@Override
+	public GoodsVO getGoods(GoodsVO goods) {
+		return adminMapper.selectGoods(goods);
 	}
 
 }

@@ -3,11 +3,9 @@ package com.hli.scheduler;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -15,30 +13,49 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.hli.domain.GoodsVO;
 import com.hli.httpclient.HttpClient;
 import com.hli.httpclient.HttpClientHandler;
 import com.hli.httpclient.OnReceiveListener;
+import com.hli.service.AdminService;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 
+@Component
 public class HttpScheduler {
+	
+	@Autowired
+	private AdminService adminService;
+	
 	private Logger log; 
 	
 	public HttpScheduler() {
 		log = LoggerFactory.getLogger(HttpScheduler.class);
+	}
+	
+	//매일 새벽 2시에 0,5,10분에 실행 
+	@Scheduled(cron="0 0,5,10 02 * * ?")
+	public void scheduleM12() {
+		getProductOfM12();
+	}
+	
+	//매일 새벽 3시에 0,5,10분에 실행 
+	@Scheduled(cron="0 0,5,10 03 * * ?")
+	public void scheduleCoup() {
+		getProductOfCoup();
 	}
 	
 	public void getProductOfCoup() {
@@ -100,12 +117,11 @@ public class HttpScheduler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
+	
 	
 	public void getProductOfM12() {
 		OnReceiveListener listener = new OnReceiveListener() {
-			
 			@Override
 			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 				cause.printStackTrace();
@@ -115,23 +131,7 @@ public class HttpScheduler {
 			
 			@Override
 			public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-				System.err.println("receive");
-				/*if (msg instanceof HttpResponse) {
-					HttpResponse response = (HttpResponse) msg;
-
-					System.err.println("STATUS: " + response.getStatus());
-					System.err.println("VERSION: " + response.getProtocolVersion());
-					System.err.println();
-
-					if (!response.headers().isEmpty()) {
-						for (CharSequence name : response.headers().names()) {
-							for (CharSequence value : response.headers().getAll(name)) {
-								System.err.println("HEADER: " + name + " = " + value);
-							}
-						}
-						System.err.println();
-					}
-				}*/
+				System.err.println("channelRead0");
 				
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
@@ -140,7 +140,6 @@ public class HttpScheduler {
 					byte [] array = new byte[buffer.capacity()];
 					for (int i = 0; i < buffer.capacity(); i ++) {
 						array[i] = buffer.getByte(i);
-						//System.out.println((char) array[i]);
 					}
 					
 					String strContent = new String(array, "euc-kr");
@@ -164,22 +163,18 @@ public class HttpScheduler {
 							Element node = (Element) list.get(i);
 							GoodsVO goods = new GoodsVO();
 							
+							goods.setProvider(1);
 							goods.setBrand_name(node.getChildText("BRAND_NAME"));
 							goods.setGoods_name(node.getChildText("GOODS_NAME"));
 							goods.setGoods_code(node.getChildText("GOODS_CODE"));
 							goods.setThumbnail(node.getChildText("THUMBNAIL"));
 							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
-
-							System.out.println("BRAND_NAME : " + node.getChildText("BRAND_NAME")); //브랜드명
-							System.out.println("GOODS_NAME : " + node.getChildText("GOODS_NAME")); //상품명
-							System.out.println("GOODS_CODE :" + node.getChildText("GOODS_CODE"));  //상품코드
-							System.out.println("THUMBNAIL : " + node.getChildText("THUMBNAIL"));   //thumbnail
-							System.out.println("MARKET_PRICE : " + node.getChildText("MARKET_PRICE"));   //시장가격
-							System.out.println("SELL_PRICE : " + node.getChildText("SELL_PRICE"));     //판매가격
-							System.out.flush();
+							System.out.println("goods:" + goods);
+							if(adminService == null) 
+								System.out.println("adminservice is null");
+							adminService.saveGoods(goods);
 						}
-
 					} catch (IOException io) {
 						System.out.println(io.getMessage());
 					} catch (JDOMException jdomex) {
@@ -196,6 +191,7 @@ public class HttpScheduler {
 		
 		//보낼 데이터 설정
 		String url = "http://web6.m12.co.kr:12101/app/dev/goods_list_total.php?marketcode=HLINTNL01";
+		//String url = "http://web6.m12.co.kr:12101/app/dev/goods_list_total.php";
 		URI uri;
 		try {
 			uri = new URI(url);

@@ -4,8 +4,8 @@
 <mapper namespace="com.hli.persistence.AdminMapper">
 
 <insert id="insertGoods" parameterType="GoodsVO">
-	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, cell_price) 
-	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{cell_price});
+	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price) 
+	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price});
 </insert>
 
 <update id="updateGoods" parameterType="GoodsVO">
@@ -18,14 +18,14 @@
 		<if test="goods_code != null">goods_code=#{goods_code},</if>
 		<if test="thumbnail != null">thumbnail=#{thumbnail},</if>
 		<if test="market_price != null">market_price=#{market_price},</if>
-		<if test="cell_price != null">cell_price=#{cell_price}</if>
+		<if test="sell_price != null">sell_price=#{sell_price}</if>
 	</set>
 	WHERE goods_id = #{goods_id} 
 </update>
 
-<select id="selectUser" parameterType="User" resultType="User">
-	SELECT * FROM user 
-	WHERE login_id = #{login_id} and password = #{password}
+<select id="selectGoods" parameterType="GoodsVO" resultType="GoodsVO">
+	SELECT * FROM goods 
+	WHERE goods_code = #{goods_code}
 	Limit 1
 </select>
 

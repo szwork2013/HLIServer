@@ -28,6 +28,11 @@
 		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="dailyRollingFileAppender"/>
 	</logger>
+	
+	<logger name="org.springframework" additivity="false" level="INFO">
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="dailyRollingFileAppender"/>
+	</logger>
  
 	<root>
 		<level value="WARN" />
