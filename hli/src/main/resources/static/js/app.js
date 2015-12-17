@@ -258,8 +258,8 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 
 	$scope.getGoodsList();
 
-	$scope.adminListPageChanged = function() {
-		$scope.getManagerList();
+	$scope.goodsListPageChanged = function() {
+		$scope.getGoodsList();
 	};
 	
 	$scope.viewDetail = function(goods) {
