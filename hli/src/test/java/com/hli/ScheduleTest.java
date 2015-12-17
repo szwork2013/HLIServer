@@ -17,7 +17,7 @@ public class ScheduleTest {
 	public void productTest() {
 		HttpScheduler schedule = new HttpScheduler();
 		//schedule.getProductOfM12();
-		schedule.getProductOfCoup();
+		schedule.getProductOfCoupList();
 	}
 
 	

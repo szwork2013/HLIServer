@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdom.Document;
@@ -43,7 +44,7 @@ public class HttpScheduler {
 	
 	private Logger log; 
 	
-	private HttpClient mClient;
+	public static HashMap<String, GoodsVO> goodsList = new HashMap<String, GoodsVO>();
 	
 	public HttpScheduler() {
 		log = LoggerFactory.getLogger(HttpScheduler.class);
@@ -55,13 +56,13 @@ public class HttpScheduler {
 		getProductOfM12();
 	}
 	
-	//매일 새벽 3시에 0,5,10분에 실행 
-	@Scheduled(cron="0 0,5,10 03 * * ?")
+	//매일 새벽 3시에 0,1 분에 실행 
+	@Scheduled(cron="0 0,1 03 * * ?")
 	public void scheduleCoup() {
-		getProductOfCoup();
+		getProductOfCoupList();
 	}
 	
-	public void getProductOfCoup() {	
+	public void getProductOfCoupList() {	
 		OnReceiveListener listener = new OnReceiveListener() {
 			
 			@Override
@@ -93,35 +94,17 @@ public class HttpScheduler {
 						
 						if(listNode != null) {
 							//전체 쿠폰 정보 읽기
+							goodsList.clear();
 							List<Element> t11List = listNode.getChildren("T11_VIEW", rootNode.getNamespace());
 							for(int i=0; i<t11List.size(); ++i) {
 								String couponCode = t11List.get(i).getChildText("COUPONCODE", rootNode.getNamespace());
-								System.out.println("coupon code:" + couponCode);
-								
-								String url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" +couponCode;
-								URI uri;
-								try {
-									uri = new URI(url);
-									
-									FullHttpRequest request = new DefaultFullHttpRequest(
-							                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
-							        
-									request.headers().set("host", uri.getHost());
-							        //request.headers().set("connection", "close");
-							        request.headers().set("accept-encoding", "gzip");
-									
-									mClient.sendRequest(request, url);
-								} catch (URISyntaxException e) {
-									e.printStackTrace();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								goodsList.put(couponCode, null);
 							}
-						} else {
-							//쿠폰 정보 파싱
-							String couponName = rootNode.getChildText("COUPONNAME", rootNode.getNamespace());
-							System.out.println("coupon name:" + couponName);
-						}
+							
+							for(String coupon : goodsList.keySet()) {
+								System.out.println("coupon code:" + coupon);
+							}
+						} 
 					} catch (IOException io) {
 						System.out.println(io.getMessage());
 					} catch (JDOMException jdomex) {
@@ -134,7 +117,7 @@ public class HttpScheduler {
 		};
 		
 		HttpClientHandler handler = new HttpClientHandler(listener);
-		mClient = new HttpClient(false, handler);
+		HttpClient client = new HttpClient(false, handler);
 		
 		//보낼 데이터 설정
 		String url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
@@ -149,7 +132,7 @@ public class HttpScheduler {
 	        //request.headers().set("connection", "close");
 	        request.headers().set("accept-encoding", "gzip");
 			
-			mClient.sendRequest(request, url);
+			client.sendRequest(request, url);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
