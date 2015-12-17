@@ -262,8 +262,7 @@ public class HttpScheduler {
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
 							goods.setGoods_info(node.getChildText("GOODS_INFO"));
 							System.out.println("goods:" + goods);
-							if(adminService == null) 
-								System.out.println("adminservice is null");
+
 							adminService.saveGoods(goods);
 						}
 					} catch (IOException io) {

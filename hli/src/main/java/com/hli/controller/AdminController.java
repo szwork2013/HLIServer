@@ -26,9 +26,31 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@Autowired
+	private HttpScheduler scheduler;
+	
 	@RequestMapping("/hello")
 	public String Hello() {
 		return "Hello test";
+	}
+	
+	//M12 상품 업데이트
+	@RequestMapping("/admin/api/getM12GoodsList")
+	public Result getM12Goods() {
+		scheduler.getProductOfM12();
+		return new Result(0, "success");
+	}
+	
+	//M12 상품 업데이트
+	@RequestMapping("/admin/api/getCoupGoodsList")
+	public Result getCoupGoodsList() {
+		scheduler.getProductOfCoupList();
+		
+		for(String couponCode : HttpScheduler.goodsList.keySet()) {
+			scheduler.getProductOfCoup(couponCode);
+		}
+		
+		return new Result(0, "success");
 	}
 	
 	//관리자화면: 상품관리
