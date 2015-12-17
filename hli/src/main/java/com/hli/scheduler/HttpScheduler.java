@@ -62,6 +62,7 @@ public class HttpScheduler {
 		getProductOfCoupList();
 	}
 	
+	//쿠프 전체 상품 코드 가져오기 
 	public void getProductOfCoupList() {	
 		OnReceiveListener listener = new OnReceiveListener() {
 			
@@ -77,15 +78,9 @@ public class HttpScheduler {
 					HttpContent content = (HttpContent) msg;
 					String strContent = content.content().toString(CharsetUtil.UTF_8);
 					System.out.println("content:" + strContent);
-					
-					InputStream in = null;
+
 					try {
-						in = new ByteArrayInputStream(strContent.getBytes("utf-8"));
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-					
-					try {
+						InputStream in = new ByteArrayInputStream(strContent.getBytes("utf-8"));
 						SAXBuilder builder = new SAXBuilder();
 						Document document = (Document) builder.build(in);
 						Element rootNode = document.getRootElement();
@@ -124,7 +119,6 @@ public class HttpScheduler {
 		URI uri;
 		try {
 			uri = new URI(url);
-			
 			FullHttpRequest request = new DefaultFullHttpRequest(
 	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
 	        
@@ -140,7 +134,82 @@ public class HttpScheduler {
 		}
 	}
 	
+	//쿠프 개별 상품 가져오기
+	public void getProductOfCoup(String couponCode) {	
+		OnReceiveListener listener = new OnReceiveListener() {
+			@Override
+			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+				cause.printStackTrace();
+		        ctx.close();
+			}
+			
+			@Override
+			public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+				if (msg instanceof HttpContent) {
+					HttpContent content = (HttpContent) msg;
+					String strContent = content.content().toString(CharsetUtil.UTF_8);
+					System.out.println("content:" + strContent);
+					
+					try {
+						InputStream in = new ByteArrayInputStream(strContent.getBytes("utf-8"));
+						SAXBuilder builder = new SAXBuilder();
+						Document document = (Document) builder.build(in);
+						Element rootNode = document.getRootElement();
+
+						Element resultCode =rootNode.getChild("RESULTCODE", rootNode.getNamespace());
+						
+						if(resultCode != null) {
+							//쿠폰 정보 저장
+							GoodsVO goods = new GoodsVO();
+							
+							goods.setProvider(2);
+							goods.setGoods_code(couponCode);
+							goods.setGoods_name(rootNode.getChildText("COUPONNAME" ,rootNode.getNamespace()));
+							goods.setBrand_name(rootNode.getChildText("COMP_NAME",rootNode.getNamespace()));
+							goods.setSell_price(rootNode.getChildText("SEL_PRICE",rootNode.getNamespace()));
+							goods.setMarket_price(rootNode.getChildText("USEPRICE",rootNode.getNamespace()));
+							goods.setThumbnail(rootNode.getChildText("THUMBNAIL",rootNode.getNamespace()));
+							goods.setGoods_info(rootNode.getChildText("USE_AREA",rootNode.getNamespace()));
+							goods.setUse_note(rootNode.getChildText("USE_NOTE",rootNode.getNamespace()));
+							goods.setUse_term(rootNode.getChildText("USE_TERM",rootNode.getNamespace()));
+							System.out.println("goods:" + goods);
+							
+							adminService.saveGoods(goods);
+						} 
+					} catch (IOException io) {
+						System.out.println(io.getMessage());
+					} catch (JDOMException jdomex) {
+						System.out.println(jdomex.getMessage());
+					}  catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
+			}
+		};
+		
+		HttpClientHandler handler = new HttpClientHandler(listener);
+		HttpClient client = new HttpClient(false, handler);
+		
+		//보낼 데이터 설정
+		String url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" + couponCode;
+		try {
+			URI uri = new URI(url);
+			FullHttpRequest request = new DefaultFullHttpRequest(
+	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
+	        
+			request.headers().set("host", uri.getHost());
+	        request.headers().set("connection", "close");
+	        request.headers().set("accept-encoding", "gzip");
+			
+			client.sendRequest(request, url);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
+	//M12 상품 정보 가져오기-----------------------------------------------------------------------------------------
 	public void getProductOfM12() {
 		OnReceiveListener listener = new OnReceiveListener() {
 			@Override
@@ -191,6 +260,7 @@ public class HttpScheduler {
 							goods.setThumbnail(node.getChildText("THUMBNAIL"));
 							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
+							goods.setGoods_info(node.getChildText("GOODS_INFO"));
 							System.out.println("goods:" + goods);
 							if(adminService == null) 
 								System.out.println("adminservice is null");

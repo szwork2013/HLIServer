@@ -10,8 +10,11 @@ public class GoodsVO {
 	private String goods_name;
 	private String goods_code;
 	private String thumbnail;
-	private String market_price;
+	private String market_price; //쿠프는 useprice or adj_price
 	private String sell_price;
+	private String goods_info; //쿠프는 use_area
+	private String use_note;   //쿠프만 존재
+	private String use_term;   //쿠프만 존재
 	private String created;
 	private String updated;
 }
