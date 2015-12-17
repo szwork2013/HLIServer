@@ -77,7 +77,7 @@ public class HttpClient {
 			bootStrap.handler(new HttpClientInitializer(ssl, handler));
 //		}
 		
-		bootStrap.option(ChannelOption.SO_KEEPALIVE, true);
+		bootStrap.option(ChannelOption.SO_KEEPALIVE, false);
     }
     
     

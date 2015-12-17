@@ -25,14 +25,12 @@ import com.hli.httpclient.OnReceiveListener;
 import com.hli.service.AdminService;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
-import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 
@@ -77,7 +75,7 @@ public class HttpScheduler {
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 					String strContent = content.content().toString(CharsetUtil.UTF_8);
-					System.out.println("content:" + strContent);
+					//System.out.println("content:" + strContent);
 
 					try {
 						InputStream in = new ByteArrayInputStream(strContent.getBytes("utf-8"));
@@ -98,6 +96,10 @@ public class HttpScheduler {
 							
 							for(String coupon : goodsList.keySet()) {
 								System.out.println("coupon code:" + coupon);
+							}
+							
+							for(String couponCode : HttpScheduler.goodsList.keySet()) {
+								getProductOfCoup(couponCode);
 							}
 						} 
 					} catch (IOException io) {
@@ -123,7 +125,7 @@ public class HttpScheduler {
 	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
 	        
 			request.headers().set("host", uri.getHost());
-	        //request.headers().set("connection", "close");
+	        request.headers().set("connection", "close");
 	        request.headers().set("accept-encoding", "gzip");
 			
 			client.sendRequest(request, url);
@@ -233,16 +235,10 @@ public class HttpScheduler {
 					}
 					
 					String strContent = new String(array, "euc-kr");
-					System.out.println("content:" + strContent);
-					
-					InputStream in = null;
-					try {
-						in = new ByteArrayInputStream(strContent.getBytes("euc-kr"));
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
+					//System.out.println("content:" + strContent);
 					
 					try {
+						InputStream in = new ByteArrayInputStream(strContent.getBytes("euc-kr"));
 						SAXBuilder builder = new SAXBuilder();
 						Document document = (Document) builder.build(in);
 						Element rootNode = document.getRootElement();

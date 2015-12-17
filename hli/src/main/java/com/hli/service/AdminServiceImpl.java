@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminService {
 		} else {
 			//update
 			inGoods.setGoods_id(goods.getGoods_id());
-			adminMapper.updateGoods(goods);
+			adminMapper.updateGoods(inGoods);
 		}
 	}
 

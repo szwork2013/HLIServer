@@ -1,5 +1,6 @@
 package com.hli.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -45,10 +46,6 @@ public class AdminController {
 	@RequestMapping("/admin/api/getCoupGoodsList")
 	public Result getCoupGoodsList() {
 		scheduler.getProductOfCoupList();
-		
-		for(String couponCode : HttpScheduler.goodsList.keySet()) {
-			scheduler.getProductOfCoup(couponCode);
-		}
 		
 		return new Result(0, "success");
 	}
