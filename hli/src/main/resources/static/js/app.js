@@ -3,7 +3,7 @@ $(function() {
 });
 
 var app = angular.module('app', [
-    'ngRoute', 'ngCookies', 'toaster', 'ngAnimate'
+    'ngRoute', 'ui.bootstrap', 'ngCookies', 'toaster', 'ngAnimate'
 ]);
 
 app.run(['$rootScope', '$cookieStore', '$http', 'toaster', function($rootScope, $cookieStore, $http, toaster) {
@@ -115,8 +115,8 @@ app.controller('ManagerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore'
 
 	$scope.roles = [
 		{code: 1, name: "슈퍼관리자"},
-		{code: 2, name: "상담사"},
-		{code: 3, name: "측정관리자"}
+		{code: 2, name: "관리자"},
+		{code: 3, name: "사용자"}
 	];
 
 
