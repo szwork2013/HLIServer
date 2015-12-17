@@ -4,8 +4,8 @@
 <mapper namespace="com.hli.persistence.AdminMapper">
 
 <insert id="insertGoods" parameterType="GoodsVO">
-	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, goods_info, use_note, use_term) 
-	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{goods_info}, #{use_note}, #{use_term});
+	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, goods_info, use_note, use_term, updated) 
+	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{goods_info}, #{use_note}, #{use_term}, now());
 </insert>
 
 <update id="updateGoods" parameterType="GoodsVO">
