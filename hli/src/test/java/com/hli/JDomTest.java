@@ -12,11 +12,12 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.junit.Test;
 
 public class JDomTest {
-	@Test
+	/*@Test
 	public void JdomTest() {
 		String xml =
 		"<?xml version=\"1.0\" encoding=\"euc-kr\"?>" + System.lineSeparator() + 
@@ -71,5 +72,74 @@ public class JDomTest {
 			System.out.println(jdomex.getMessage());
 		}
 
+	}*/
+	
+	@Test
+	public void JDomTest2() {
+		String xml = 
+		"<?xml version=\"1.0\" encoding=\"utf-8\"?>" + System.lineSeparator() + 
+		"<API_OUT_T11 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://gsapi.m2i.kr/\">" + System.lineSeparator() + 
+		"<RESULTCODE>00</RESULTCODE>" + System.lineSeparator() + 
+		"<RESULTMSG>완료</RESULTMSG>" + System.lineSeparator() + 
+		"<LISTCOUNT>16</LISTCOUNT>" + System.lineSeparator() + 
+		"<LIST>" + System.lineSeparator() + 
+		"<T11_VIEW>" + System.lineSeparator() + 
+		"<COUPONCODE>00A1310S00001</COUPONCODE>" + System.lineSeparator() + 
+		"<UPDATE_DAY>2014-01-09 10:04</UPDATE_DAY>" + System.lineSeparator() + 
+		"<USE_YN>Y</USE_YN>" + System.lineSeparator() + 
+		"</T11_VIEW>" + System.lineSeparator() + 
+		"<T11_VIEW>" + System.lineSeparator() + 
+		"<COUPONCODE>00A1310Q00001</COUPONCODE>" + System.lineSeparator() + 
+		"<UPDATE_DAY>2014-01-09 10:03</UPDATE_DAY>" + System.lineSeparator() + 
+		"<USE_YN>Y</USE_YN>" + System.lineSeparator() + 
+		"</T11_VIEW>" + System.lineSeparator() + 
+		"</LIST>" + System.lineSeparator() + 
+		"</API_OUT_T11>";
+		
+		System.out.println(xml);
+		System.out.println("----------------------");
+		
+		SAXBuilder builder = new SAXBuilder();
+		// File xmlFile = new File("c:\\file.xml");
+		InputStream in = null;
+		try {
+			in = new ByteArrayInputStream(xml.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Document document = (Document) builder.build(in);
+			Element rootNode = document.getRootElement();
+			System.out.println("" + rootNode.getName() + "," + rootNode.getNamespace() + "," + rootNode.getNamespaceURI());
+			
+			//rootNode.setNamespace(Namespace.NO_NAMESPACE);
+			//System.out.println("" + rootNode.getName() + "," + rootNode.getNamespace() + "," + rootNode.getNamespaceURI());
+			
+			//Test
+/*			Element element = rootNode.getChild("LISTCOUNT", rootNode.getNamespace());
+			System.out.println("name:" + element.getName());
+			System.out.println("text:" + element.getText());*/
+			
+			Element listNode =rootNode.getChild("LIST", rootNode.getNamespace());
+			
+			if(listNode != null) {
+				List<Element> t11List = listNode.getChildren("T11_VIEW", rootNode.getNamespace());
+				for(int i=0; i<t11List.size(); ++i) {
+					String couponCode = t11List.get(i).getChildText("COUPONCODE", rootNode.getNamespace());
+					System.out.println("coupon code:" + couponCode);
+				}
+			} else {
+				
+			}
+
+
+		} catch (IOException io) {
+			System.out.println("io error:" + io.getMessage());
+		} catch (JDOMException jdomex) {
+			System.out.println(jdomex.getMessage());
+		} catch (Exception e) {
+			System.out.println("exception:" + e.getMessage());
+		} 
 	}
 }
