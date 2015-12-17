@@ -170,6 +170,7 @@ public class HttpScheduler {
 							goods.setBrand_name(rootNode.getChildText("COMP_NAME",rootNode.getNamespace()));
 							goods.setSell_price(rootNode.getChildText("SEL_PRICE",rootNode.getNamespace()));
 							goods.setMarket_price(rootNode.getChildText("USEPRICE",rootNode.getNamespace()));
+							goods.setAdj_price(rootNode.getChildText("ADJ_PRICE",rootNode.getNamespace()));
 							goods.setThumbnail(rootNode.getChildText("BASIC_IMG",rootNode.getNamespace()));
 							goods.setGoods_info(rootNode.getChildText("USE_AREA",rootNode.getNamespace()));
 							goods.setUse_note(rootNode.getChildText("USE_NOTE",rootNode.getNamespace()));
