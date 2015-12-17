@@ -29,6 +29,15 @@
 	Limit 1
 </select>
 
+<select id="selectGoodsList" parameterType="SearchVO" resultType="GoodsVO">
+	SELECT * FROM goods
+	LIMIT #{start_index}, #{page_size}
+</select>
+
+<select id="countGoods" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM goods
+</select>
+
 
 <insert id="insertManager" parameterType="ManagerVO">
 	INSERT INTO manager(id, pass, name, role_id)

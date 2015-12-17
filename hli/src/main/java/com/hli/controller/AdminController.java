@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
 import com.hli.domain.SearchVO;
 import com.hli.result.Result;
@@ -28,6 +29,17 @@ public class AdminController {
 	@RequestMapping("/hello")
 	public String Hello() {
 		return "Hello test";
+	}
+	
+	//관리자화면: 상품관리
+	@RequestMapping("/admin/api/getGoodsList")
+    public ResultDataTotal<List<GoodsVO>> getGoodsList(@RequestBody SearchVO search) {
+		logger.debug("/api/getGoodsList--------------------------------------------------");
+		List<GoodsVO> goodsList = adminService.getGoodsList(search);
+		
+		int total = adminService.countGoods(search);
+		
+		return new ResultDataTotal<List<GoodsVO>>(0, "success", goodsList, total);
 	}
 	
 	//관리자화면: 사용자 관리=====================================================================

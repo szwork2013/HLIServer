@@ -69,6 +69,12 @@ app.service('ManagerSvc', function($http) {
 	}
 });
 
+app.service('GoodsSvc', function($http) {
+	this.getGoodsList = function(search) {
+		return $http.post('/admin/api/getGoodsList', search);
+	}
+});
+
 app.directive('calendar', function () {
     return {
         require: 'ngModel',
@@ -222,4 +228,45 @@ app.controller('ManagerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore'
 			});
 		};
 	}
+}]);
+
+app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'GoodsSvc', function ($scope, $rootScope, $window, $cookieStore, GoodsSvc) {
+	$scope.goodslist = [];
+	
+	$scope.currentPageGoods = 1;
+	$scope.totalGoodsListCount = 0;
+	
+	$scope.providers = [
+	        		{code: 1, name: "M12"},
+	        		{code: 2, name: "Coup"}
+	        	];
+
+	$scope.getGoodsList = function(){
+		GoodsSvc.getGoodsList({start_index:($scope.currentPageGoods - 1) * 10, page_size:10})
+		.success(function(goodslist, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.goodslist = goodslist.data;
+			$scope.totalGoodsListCount = goodslist.total;
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.getGoodsList();
+
+	$scope.adminListPageChanged = function() {
+		$scope.getManagerList();
+	};
+	
+	$scope.viewDetail = function(goods) {
+		$scope.goods_name = goods.goods_name;
+		$scope.brand_name = goods.brand_name;
+		$scope.market_price = goods.market_price;
+		$scope.updated = goods.updated;
+	}
+
 }]);

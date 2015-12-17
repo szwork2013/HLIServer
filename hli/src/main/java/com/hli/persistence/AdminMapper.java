@@ -13,6 +13,10 @@ public interface AdminMapper {
 	public int updateGoods(GoodsVO goods);
 	public GoodsVO selectGoods(GoodsVO goods);
 	
+	//상품관리
+	public List<GoodsVO> selectGoodsList(SearchVO search);
+	public int countGoods(SearchVO search);
+	
 	//관리자 화면 사용자 관리
 	public long insertManager(ManagerVO manager) throws PersistenceException;
 	public long updateManager(ManagerVO manager) throws PersistenceException;

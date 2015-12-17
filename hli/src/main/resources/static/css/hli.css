@@ -37,6 +37,10 @@ body {
     height:18px\0/IE8+9;
 }
 
+.text-right{
+	text-align: right;
+}
+
 .offset-btm-10{margin-bottom: 10px;}
 .offset-left-10{margin-left: 10px;}
 

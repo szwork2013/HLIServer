@@ -77,4 +77,14 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.selectManagerList(search);
 	}
 
+	@Override
+	public List<GoodsVO> getGoodsList(SearchVO search) {
+		return adminMapper.selectGoodsList(search);
+	}
+
+	@Override
+	public int countGoods(SearchVO search) {
+		return adminMapper.countGoods(search);
+	}
+
 }

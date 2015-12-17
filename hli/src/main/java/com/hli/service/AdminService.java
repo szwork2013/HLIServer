@@ -14,6 +14,10 @@ public interface AdminService {
 	public GoodsVO getGoods(GoodsVO goods);
 	public void saveGoods(GoodsVO goods);
 	
+	//상품관리
+	public List<GoodsVO> getGoodsList(SearchVO search);
+	public int countGoods(SearchVO search);
+	
 	//관리자 화면 사용자 관리
 	public long addManager(ManagerVO manager) throws PersistenceException;
 	public long modifyManager(ManagerVO manager) throws PersistenceException;
