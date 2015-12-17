@@ -42,20 +42,20 @@ public class HttpScheduler {
 	
 	private Logger log; 
 	
-	public static HashMap<String, GoodsVO> goodsList = new HashMap<String, GoodsVO>();
+	private HashMap<String, GoodsVO> goodsList = new HashMap<String, GoodsVO>();
 	
 	public HttpScheduler() {
 		log = LoggerFactory.getLogger(HttpScheduler.class);
 	}
 	
 	//매일 새벽 2시에 0,5,10분에 실행 
-	@Scheduled(cron="0 0,5,10 02 * * ?")
+	@Scheduled(cron="0 0 02 * * ?")
 	public void scheduleM12() {
 		getProductOfM12();
 	}
 	
 	//매일 새벽 3시에 0,1 분에 실행 
-	@Scheduled(cron="0 0,1 03 * * ?")
+	@Scheduled(cron="0 0 03 * * ?")
 	public void scheduleCoup() {
 		getProductOfCoupList();
 	}
@@ -98,7 +98,7 @@ public class HttpScheduler {
 								System.out.println("coupon code:" + coupon);
 							}
 							
-							for(String couponCode : HttpScheduler.goodsList.keySet()) {
+							for(String couponCode : goodsList.keySet()) {
 								getProductOfCoup(couponCode);
 							}
 						} 
@@ -170,7 +170,7 @@ public class HttpScheduler {
 							goods.setBrand_name(rootNode.getChildText("COMP_NAME",rootNode.getNamespace()));
 							goods.setSell_price(rootNode.getChildText("SEL_PRICE",rootNode.getNamespace()));
 							goods.setMarket_price(rootNode.getChildText("USEPRICE",rootNode.getNamespace()));
-							goods.setThumbnail(rootNode.getChildText("THUMBNAIL",rootNode.getNamespace()));
+							goods.setThumbnail(rootNode.getChildText("BASIC_IMG",rootNode.getNamespace()));
 							goods.setGoods_info(rootNode.getChildText("USE_AREA",rootNode.getNamespace()));
 							goods.setUse_note(rootNode.getChildText("USE_NOTE",rootNode.getNamespace()));
 							goods.setUse_term(rootNode.getChildText("USE_TERM",rootNode.getNamespace()));
