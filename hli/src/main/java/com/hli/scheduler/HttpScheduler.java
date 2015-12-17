@@ -24,6 +24,7 @@ import com.hli.httpclient.OnReceiveListener;
 import com.hli.service.AdminService;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -58,7 +59,7 @@ public class HttpScheduler {
 		getProductOfCoup();
 	}
 	
-	public void getProductOfCoup() {
+	public void getProductOfCoup() {	
 		OnReceiveListener listener = new OnReceiveListener() {
 			
 			@Override
@@ -69,28 +70,55 @@ public class HttpScheduler {
 			
 			@Override
 			public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-				if (msg instanceof HttpResponse) {
-					HttpResponse response = (HttpResponse) msg;
-
-					System.err.println("STATUS: " + response.getStatus());
-					System.err.println("VERSION: " + response.getProtocolVersion());
-					System.err.println();
-
-					if (!response.headers().isEmpty()) {
-						for (CharSequence name : response.headers().names()) {
-							for (CharSequence value : response.headers().getAll(name)) {
-								System.err.println("HEADER: " + name + " = " + value);
-							}
-						}
-						System.err.println();
-					}
-				}
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 
-					System.err.print(content.content().toString(CharsetUtil.UTF_8));
-					System.err.flush();
+					ByteBuf buffer = content.content();
+					byte [] array = new byte[buffer.capacity()];
+					for (int i = 0; i < buffer.capacity(); i ++) {
+						array[i] = buffer.getByte(i);
+					}
+					
+					String strContent = new String(array, "euc-kr");
+					System.out.println("content:" + strContent);
+					
+					InputStream in = null;
+					try {
+						in = new ByteArrayInputStream(strContent.getBytes("euc-kr"));
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					
+					try {
+						SAXBuilder builder = new SAXBuilder();
+						Document document = (Document) builder.build(in);
+						Element rootNode = document.getRootElement();
+						String listcount = rootNode.getChildTextTrim("LISTCOUNT");
+						System.out.println("list size()" + listcount);
 
+						/*for (int i = 0; i < list.size(); i++) {
+							Element node = (Element) list.get(i);
+							GoodsVO goods = new GoodsVO();
+							
+							goods.setProvider(1);
+							goods.setBrand_name(node.getChildText("BRAND_NAME"));
+							goods.setGoods_name(node.getChildText("GOODS_NAME"));
+							goods.setGoods_code(node.getChildText("GOODS_CODE"));
+							goods.setThumbnail(node.getChildText("THUMBNAIL"));
+							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
+							goods.setSell_price(node.getChildText("SELL_PRICE"));
+							System.out.println("goods:" + goods);
+							if(adminService == null) 
+								System.out.println("adminservice is null");
+							adminService.saveGoods(goods);
+						}*/
+					} catch (IOException io) {
+						System.out.println(io.getMessage());
+					} catch (JDOMException jdomex) {
+						System.out.println(jdomex.getMessage());
+					}  catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
 				}
 			}
 		};
@@ -105,10 +133,10 @@ public class HttpScheduler {
 			uri = new URI(url);
 			
 			FullHttpRequest request = new DefaultFullHttpRequest(
-	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() /*+ "?" + uri.getRawQuery()*/ );
+	                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.getRawPath() + "?" + uri.getRawQuery() );
 	        
 			request.headers().set("host", uri.getHost());
-	        request.headers().set("connection", "close");
+	        //request.headers().set("connection", "close");
 	        request.headers().set("accept-encoding", "gzip");
 			
 			client.sendRequest(request, url);
