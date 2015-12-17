@@ -4,8 +4,8 @@
 <mapper namespace="com.hli.persistence.AdminMapper">
 
 <insert id="insertGoods" parameterType="GoodsVO">
-	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price) 
-	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price});
+	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, goods_info, use_note, use_term) 
+	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{goods_info}, #{use_note}, #{use_term});
 </insert>
 
 <update id="updateGoods" parameterType="GoodsVO">
@@ -18,7 +18,10 @@
 		<if test="goods_code != null">goods_code=#{goods_code},</if>
 		<if test="thumbnail != null">thumbnail=#{thumbnail},</if>
 		<if test="market_price != null">market_price=#{market_price},</if>
-		<if test="sell_price != null">sell_price=#{sell_price}</if>
+		<if test="sell_price != null">sell_price=#{sell_price},</if>
+		<if test="goods_info != null">goods_info=#{goods_info},</if>
+		<if test="use_note != null">sell_price=#{use_note},</if>
+		<if test="use_term != null">use_term=#{use_term}</if>
 	</set>
 	WHERE goods_id = #{goods_id} 
 </update>

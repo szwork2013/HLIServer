@@ -264,9 +264,10 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 	
 	$scope.viewDetail = function(goods) {
 		$scope.goods_name = goods.goods_name;
-		$scope.brand_name = goods.brand_name;
-		$scope.market_price = goods.market_price;
-		$scope.updated = goods.updated;
+		$scope.goods_code = goods.goods_code;
+		$scope.goods_info = goods.goods_info;
+		$scope.use_note = goods.use_note;
+		$scope.use_term = goods.use_term;
 	}
 
 }]);
