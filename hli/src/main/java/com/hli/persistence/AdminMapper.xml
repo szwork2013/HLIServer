@@ -21,7 +21,7 @@
 		<if test="sell_price != null">sell_price=#{sell_price},</if>
 		<if test="adj_price != null">adj_price=#{adj_price},</if>
 		<if test="goods_info != null">goods_info=#{goods_info},</if>
-		<if test="use_note != null">sell_price=#{use_note},</if>
+		<if test="use_note != null">use_note=#{use_note},</if>
 		<if test="use_term != null">use_term=#{use_term}</if>
 	</set>
 	WHERE goods_id = #{goods_id} 
