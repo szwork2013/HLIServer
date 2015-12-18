@@ -261,7 +261,7 @@ public class HttpScheduler {
 							System.out.println("goods:" + goods);
 
 							adminService.saveGoods(goods);
-							Thread.sleep(500);
+							Thread.sleep(100);
 						}
 					} catch (IOException io) {
 						System.out.println(io.getMessage());
