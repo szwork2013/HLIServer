@@ -1,0 +1,144 @@
+<div>
+	<div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">판매업체 관리</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-list fa-lg"></i> 판매업체 목록
+					<div class="pull-right">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="clearAdmin()">판매업체 추가</button>
+                    </div>
+				</div>
+				<table class="table table-striped">
+					<thead>
+			    		<tr>
+			    			<td>편집</td>
+			    			<td>판매업체명</td>
+			    			<td>아이디</td>
+			    			<td>담당자</td>
+			    			<td>연락처</td>
+			    			<td>연동판매여부</td>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+					    <tr ng-repeat="seller in sellers">
+					    	<td>
+					    		<button class="btn btn-default btn-xs" ng-click="editAdmin(admin)">
+						        	<span class="glyphicon glyphicon-pencil"></span> 수 정
+						        </button>
+						        <button class="btn btn-default btn-xs" ng-click="deleteAdmin(admin)">
+						        	<span class="glyphicon glyphicon-remove-circle"></span> 삭 제
+						        </button>
+						    </td>
+						    <td>{{ seller.company_name}}</td>
+						    <td>{{ seller.seller_id}}</td>
+						    <td>{{ seller.person_name}}</td>
+						    <td>{{ seller.contact}}</td>
+						    <td>{{ sale_status_list[seller.sale_status-1].name}}</td>
+					    </tr>
+					    <tr>
+					    	<td colspan="7" style="text-align:center">
+					    		<pagination boundary-links="true" total-items="totalSellerListCount" ng-model="currentPageSeller" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="sellerListPageChanged()"></pagination>
+					    	</td>
+					    </tr>
+				    </tbody>
+			    </table>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-edit fa-lg"></i> {{seller_mode_text}}
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">아이디</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="seller_id" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">업체명</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="company_name" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">MID</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="mid" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">비밀번호</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="password" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">CODE</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="code" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">담당자명</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="person_name" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">연락처</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="contact" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">이메일</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="email" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="titleText" class="col-sm-4 control-label">허용 IP</label>
+					    	<div class="col-sm-8">
+					      		<input type="text" class="form-control" ng-model="allowed_ip" />
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="noti_dateText" class="col-sm-4 control-label">연동판매여부</label>
+					    	<div class="col-sm-8">
+					      		<select class="form-control" ng-model="sale_status">
+					      			<option value="">Select sale_status-------</option> <!-- not selected / blank option -->
+					      			<option ng-repeat="status in sale_status_list" value="{{status.code}}">
+						        		{{status.name}}
+						    		</option>
+					      		</select>
+					    	</div>
+					  	</div>
+					</form> 
+					<div class="row" ng-switch="seller_mode">
+							<div class="col-lg-6" ng-switch-when="edit">
+					      		<button type="button" ng-click="modifyAdmin()" class="btn btn-info btn-block"><i class="fa fa-save fa-lg"></i> Save</button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="edit">
+					      		<button type="button" class="btn btn-info btn-block disabled"><i class="fa fa-plus fa-lg"></i> Add </button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="">
+					      		<button type="button" class="btn btn-info btn-block disabled"><i class="fa fa-save fa-lg"></i> Save</button>
+					    	</div>
+					    	<div class="col-lg-6" ng-switch-when="">
+					      		<button type="button" ng-click="addSeller()" class="btn btn-info btn-block"><i class="fa fa-plus fa-lg"></i> Add </button>
+					    	</div>
+					   	</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>

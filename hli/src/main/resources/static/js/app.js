@@ -75,6 +75,16 @@ app.service('GoodsSvc', function($http) {
 	}
 });
 
+app.service('SellerSvc', function($http) {
+	this.getSellerList = function(admin) {
+		return $http.post('/admin/api/getSellerList', admin);
+	}
+	this.addSeller = function(admin) {
+		return $http.post('/admin/api/addSeller', admin);
+	}
+});
+
+
 app.directive('calendar', function () {
     return {
         require: 'ngModel',
@@ -273,4 +283,84 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 		$scope.use_term = goods.use_term;
 	}
 
+}]);
+
+app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'SellerSvc', function ($scope, $rootScope, $window, $cookieStore, SellerSvc) {
+	$scope.sellers = [];
+	
+	$scope.currentPageSeller = 1;
+	$scope.totalSellerListCount = 0;
+
+	$scope.seller_mode = "";
+	$scope.seller_mode_text = "판매업체 추가";
+
+	$scope.sale_status_list = [
+		{code: 1, name: "대기중"},
+		{code: 2, name: "진행중"},
+		{code: 3, name: "중지"}
+	];
+
+
+	$scope.getSellerList = function(){
+		SellerSvc.getSellerList({start_index:($scope.currentPageSeller - 1) * 10, page_size:10})
+		.success(function(sellers, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.sellers = sellers.data;
+			$scope.totalSellerListCount = sellers.total;
+
+			$scope.clearSeller();
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.getSellerList();
+
+	$scope.clearSeller = function() {
+		$scope.seller_mode = "";
+		$scope.seller_mode_text = "관리자 추가";
+
+		$scope.company_name = null;
+		$scope.seller_id = null;
+		$scope.person_name = null;
+		$scope.contact = null;
+		$scope.sale_status = "";
+	}
+
+	$scope.sellerListPageChanged = function() {
+		$scope.getSellerList();
+	};
+	
+	$scope.addSeller = function() {
+		var seller = {
+			seller_id: $scope.seller_id,
+			company_name: $scope.company_name,
+			mid: $scope.mid,
+			password: $scope.password,
+			mid: $scope.mid,
+			code: $scope.code,
+			person_name: $scope.person_name,
+			contact: $scope.contact,
+			email: $scope.email,
+			allowed_ip: $scope.allowed_ip,
+			sale_status: $scope.sale_status,
+		}
+
+		SellerSvc.addSeller(seller)
+		.success(function(data){
+			$scope.clearSeller();
+			$scope.getSellerList();
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+	
 }]);
