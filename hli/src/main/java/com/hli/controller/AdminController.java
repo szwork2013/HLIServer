@@ -129,7 +129,7 @@ public class AdminController {
 	//판매업체 관리=====================================================================
 	@RequestMapping("/admin/api/addSeller")
     public Result addSeller(@RequestBody SellerVO seller) {
-		logger.debug("/api/addManager------------------------------------------------------------");
+		logger.debug("/api/addSeller------------------------------------------------------------");
 		
 		try {
 			long resultCount = adminService.addSeller(seller);
@@ -141,5 +141,15 @@ public class AdminController {
 		} catch (PersistenceException e) {
 			return new Result(100, "insert failed");
 		} 
+	}
+	
+	@RequestMapping("/admin/api/getSellerList")
+    public ResultDataTotal<List<SellerVO>> getSellerList(@RequestBody SearchVO search) {
+		logger.debug("/api/getSellerList--------------------------------------------------");
+		List<SellerVO> sellerList = adminService.getSellerList(search);
+		
+		int total = adminService.countManager(search);
+		
+		return new ResultDataTotal<List<SellerVO>>(0, "success", sellerList, total);
 	}
 }

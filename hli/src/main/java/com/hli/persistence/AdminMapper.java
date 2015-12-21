@@ -28,4 +28,6 @@ public interface AdminMapper {
 	
 	//판매업체 관리
 	public long insertSeller(SellerVO Seller) throws PersistenceException;
+	public int countSeller(SearchVO search);
+	public List<SellerVO> selectSellerList(SearchVO search);
 }

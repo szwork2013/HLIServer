@@ -29,4 +29,6 @@ public interface AdminService {
 	
 	//판매업체 관리
 	public long addSeller(SellerVO seller) throws PersistenceException;
+	public int countSeller(SearchVO search);
+	public List<SellerVO> getSellerList(SearchVO search);
 }

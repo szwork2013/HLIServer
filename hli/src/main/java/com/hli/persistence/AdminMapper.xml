@@ -110,4 +110,19 @@
 					#{email}, #{allowed_ip}, #{sale_status});
 </insert>
 
+<select id="countSeller" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM manager
+</select>
+
+<select id="selectSellerList" parameterType="SearchVO" resultType="SellerVO">
+	SELECT 
+		seller_id, company_name, mid, password, code, person_name, contact,
+		email, allowed_ip, sale_status
+	FROM seller
+	ORDER BY company_name
+	<if test="page_size != 0">
+		LIMIT #{start_index}, #{page_size}
+	</if>
+</select>
+
 </mapper>

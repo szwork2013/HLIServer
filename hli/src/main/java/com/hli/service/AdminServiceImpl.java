@@ -88,9 +88,21 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.countGoods(search);
 	}
 
+	
+	//판매업체 관리
 	@Override
 	public long addSeller(SellerVO seller) throws PersistenceException {
 		return adminMapper.insertSeller(seller);
+	}
+
+	@Override
+	public int countSeller(SearchVO search) {
+		return adminMapper.countSeller(search);
+	}
+
+	@Override
+	public List<SellerVO> getSellerList(SearchVO search) {
+		return adminMapper.selectSellerList(search);
 	}
 
 }
