@@ -102,4 +102,12 @@
 	</if>
 </select>
 
+<!-- 판매업체 관리 -->
+<insert id="insertSeller" parameterType="SellerVO">
+	INSERT INTO seller(seller_id, company_name, mid, password, code, person_name, contact,
+					email, allowed_ip, sale_status)
+		VALUES(#{seller_id}, #{company_name}, #{mid}, #{password}, #{code}, #{person_name}, #{contact},
+					#{email}, #{allowed_ip}, #{sale_status});
+</insert>
+
 </mapper>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
 import com.hli.domain.SearchVO;
+import com.hli.domain.SellerVO;
 import com.hli.result.Result;
 import com.hli.result.ResultData;
 import com.hli.result.ResultDataTotal;
@@ -124,5 +125,21 @@ public class AdminController {
 		
 		return new ResultDataTotal<List<ManagerVO>>(0, "success", managerList, total);
 	}
-
+	
+	//판매업체 관리=====================================================================
+	@RequestMapping("/admin/api/addSeller")
+    public Result addSeller(@RequestBody SellerVO seller) {
+		logger.debug("/api/addManager------------------------------------------------------------");
+		
+		try {
+			long resultCount = adminService.addSeller(seller);
+			if(resultCount > 0) {
+				return new Result(0, "success");
+			} else {
+				return new Result(100, "insert failed");
+			}
+		} catch (PersistenceException e) {
+			return new Result(100, "insert failed");
+		} 
+	}
 }

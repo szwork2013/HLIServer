@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
 import com.hli.domain.SearchVO;
+import com.hli.domain.SellerVO;
 import com.hli.persistence.AdminMapper;
 
 @Service
@@ -85,6 +86,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int countGoods(SearchVO search) {
 		return adminMapper.countGoods(search);
+	}
+
+	@Override
+	public long addSeller(SellerVO seller) throws PersistenceException {
+		return adminMapper.insertSeller(seller);
 	}
 
 }

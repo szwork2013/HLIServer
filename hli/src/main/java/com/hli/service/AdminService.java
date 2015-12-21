@@ -7,6 +7,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
 import com.hli.domain.SearchVO;
+import com.hli.domain.SellerVO;
 
 public interface AdminService {
 	public int addGoods(GoodsVO goods);
@@ -25,4 +26,7 @@ public interface AdminService {
 	public int countManager(SearchVO search);
 	public ManagerVO getManager(ManagerVO manager);
 	public List<ManagerVO> getManagerList(SearchVO search);
+	
+	//판매업체 관리
+	public long addSeller(SellerVO seller) throws PersistenceException;
 }
