@@ -110,6 +110,11 @@
 					#{email}, #{allowed_ip}, #{sale_status});
 </insert>
 
+<insert id="insertMapSellerGoods" parameterType="MapSellerGoodsVO">
+	INSERT INTO map_seller_goods(seller_id, goods_id, commission)
+	VALUES(#{seller_id}, #{goods_id}, #{commission});
+</insert>
+
 <select id="countSeller" parameterType="SearchVO" resultType="Integer">
 	SELECT count(*) FROM manager
 </select>

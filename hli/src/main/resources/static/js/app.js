@@ -322,7 +322,7 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 
 	$scope.clearSeller = function() {
 		$scope.seller_mode = "";
-		$scope.seller_mode_text = "관리자 추가";
+		$scope.seller_mode_text = "판매업체 추가";
 
 		$scope.company_name = null;
 		$scope.seller_id = null;

@@ -23,15 +23,16 @@
 			    			<td>담당자</td>
 			    			<td>연락처</td>
 			    			<td>연동판매여부</td>
+			    			<td>상품연동</td>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
 					    <tr ng-repeat="seller in sellers">
 					    	<td>
-					    		<button class="btn btn-default btn-xs" ng-click="editAdmin(admin)">
+					    		<button class="btn btn-default btn-xs" ng-click="editSeller(seller)">
 						        	<span class="glyphicon glyphicon-pencil"></span> 수 정
 						        </button>
-						        <button class="btn btn-default btn-xs" ng-click="deleteAdmin(admin)">
+						        <button class="btn btn-default btn-xs" ng-click="deleteSeller(seller)">
 						        	<span class="glyphicon glyphicon-remove-circle"></span> 삭 제
 						        </button>
 						    </td>
@@ -40,6 +41,11 @@
 						    <td>{{ seller.person_name}}</td>
 						    <td>{{ seller.contact}}</td>
 						    <td>{{ sale_status_list[seller.sale_status-1].name}}</td>
+						    <td>
+						    	<button class="btn btn-default btn-xs" ng-click="editGoods(seller)">
+						        	<span class="glyphicon glyphicon-pencil"></span>상품보기
+						        </button>
+						    </td>
 					    </tr>
 					    <tr>
 					    	<td colspan="7" style="text-align:center">
