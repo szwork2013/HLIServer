@@ -6,6 +6,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
+import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerVO;
 
@@ -27,7 +28,8 @@ public interface AdminMapper {
 	public List<ManagerVO> selectManagerList(SearchVO search);
 	
 	//판매업체 관리
-	public long insertSeller(SellerVO Seller) throws PersistenceException;
+	public int insertSeller(SellerVO Seller) throws PersistenceException;
+	public void insertMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> selectSellerList(SearchVO search);
 }

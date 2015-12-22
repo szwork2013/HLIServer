@@ -35,7 +35,9 @@
 
 <select id="selectGoodsList" parameterType="SearchVO" resultType="GoodsVO">
 	SELECT * FROM goods
-	LIMIT #{start_index}, #{page_size}
+	<if test="page_size != 0">
+		LIMIT #{start_index}, #{page_size}
+	</if>
 </select>
 
 <select id="countGoods" parameterType="SearchVO" resultType="Integer">
@@ -103,10 +105,10 @@
 </select>
 
 <!-- 판매업체 관리 -->
-<insert id="insertSeller" parameterType="SellerVO">
-	INSERT INTO seller(seller_id, company_name, mid, password, code, person_name, contact,
+<insert id="insertSeller" parameterType="SellerVO" useGeneratedKeys="true" keyProperty="seller_id" keyColumn="seller_id">
+	INSERT INTO seller(company_name, mid, password, code, person_name, contact,
 					email, allowed_ip, sale_status)
-		VALUES(#{seller_id}, #{company_name}, #{mid}, #{password}, #{code}, #{person_name}, #{contact},
+		VALUES(#{company_name}, #{mid}, #{password}, #{code}, #{person_name}, #{contact},
 					#{email}, #{allowed_ip}, #{sale_status});
 </insert>
 

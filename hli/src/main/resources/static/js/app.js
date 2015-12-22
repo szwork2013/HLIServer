@@ -337,7 +337,6 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 	
 	$scope.addSeller = function() {
 		var seller = {
-			seller_id: $scope.seller_id,
 			company_name: $scope.company_name,
 			mid: $scope.mid,
 			password: $scope.password,

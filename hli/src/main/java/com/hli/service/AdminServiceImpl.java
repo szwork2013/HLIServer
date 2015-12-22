@@ -1,5 +1,6 @@
 package com.hli.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
+import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerVO;
 import com.hli.persistence.AdminMapper;
@@ -91,8 +93,18 @@ public class AdminServiceImpl implements AdminService {
 	
 	//판매업체 관리
 	@Override
-	public long addSeller(SellerVO seller) throws PersistenceException {
-		return adminMapper.insertSeller(seller);
+	public int addSeller(SellerVO seller) throws PersistenceException {
+		//자동생성된 seller의 키는 seller 객체에 담겨 있다.
+		int seller_id = adminMapper.insertSeller(seller);
+
+		
+		SearchVO search = new SearchVO();
+		List<GoodsVO> goodsList = getGoodsList(search);
+		for(GoodsVO goods : goodsList) {
+			adminMapper.insertMapSellerGoods(new MapSellerGoodsVO(seller.getSeller_id(), goods.getGoods_id(), "0"));
+		}
+		
+		return seller_id;
 	}
 
 	@Override
