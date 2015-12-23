@@ -82,6 +82,9 @@ app.service('SellerSvc', function($http) {
 	this.addSeller = function(admin) {
 		return $http.post('/admin/api/addSeller', admin);
 	}
+	this.getGoodsListOfSeller = function getGoodsListOfSeller (search) {
+		return $http.post('/admin/api/getGoodsOfSeller', search);
+	}
 });
 
 
@@ -300,6 +303,11 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		{code: 3, name: "중지"}
 	];
 
+	$scope.currentPageGoods = 1;
+	$scope.totalGoodsListCount = 0;
+	$scope.goodslist = null;
+	$scope.company_name = null;
+
 
 	$scope.getSellerList = function(){
 		SellerSvc.getSellerList({start_index:($scope.currentPageSeller - 1) * 10, page_size:10})
@@ -353,6 +361,31 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		.success(function(data){
 			$scope.clearSeller();
 			$scope.getSellerList();
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.editGoods = function(seller) {
+		console.log('editGoods');
+		$scope.goodslist = null; //초기화
+		$scope.company_name = seller.company_name;
+
+		var search = {
+			seller_id: seller.seller_id,
+			start_index: 0,
+			page_size:30
+		}
+
+		SellerSvc.getGoodsListOfSeller(search)
+		.success(function(datas, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.goodslist = datas.data;
+			$scope.totalGoodsListCount = datas.total;
 		}).error(function(data, status) {
 			if (status == 401) {
 				$rootScope.logout();

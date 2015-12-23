@@ -32,4 +32,6 @@ public interface AdminMapper {
 	public void insertMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> selectSellerList(SearchVO search);
+	public List<MapSellerGoodsVO> selectGoodsOfSeller(SearchVO search);
+	public int countGoodsOfSeller(SearchVO search);
 }

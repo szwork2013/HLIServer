@@ -6,6 +6,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
+import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerVO;
 
@@ -31,4 +32,6 @@ public interface AdminService {
 	public int addSeller(SellerVO seller) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> getSellerList(SearchVO search);
+	public List<MapSellerGoodsVO> getGoodsOfSeller(SearchVO search);
+	public int countGoodsOfSeller(SearchVO search);
 }

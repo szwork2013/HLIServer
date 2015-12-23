@@ -101,7 +101,11 @@ public class AdminServiceImpl implements AdminService {
 		SearchVO search = new SearchVO();
 		List<GoodsVO> goodsList = getGoodsList(search);
 		for(GoodsVO goods : goodsList) {
-			adminMapper.insertMapSellerGoods(new MapSellerGoodsVO(seller.getSeller_id(), goods.getGoods_id(), "0"));
+			MapSellerGoodsVO mapVO = new MapSellerGoodsVO();
+			mapVO.setSeller_id(seller.getSeller_id());
+			mapVO.setGoods_id(goods.getGoods_id());
+			mapVO.setCommission("0");
+			adminMapper.insertMapSellerGoods(mapVO);
 		}
 		
 		return seller_id;
@@ -115,6 +119,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<SellerVO> getSellerList(SearchVO search) {
 		return adminMapper.selectSellerList(search);
+	}
+
+	@Override
+	public List<MapSellerGoodsVO> getGoodsOfSeller(SearchVO search) {
+		return adminMapper.selectGoodsOfSeller(search);
+	}
+
+	@Override
+	public int countGoodsOfSeller(SearchVO search) {
+		return adminMapper.countGoodsOfSeller(search);
 	}
 
 }

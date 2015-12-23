@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
+import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerVO;
 import com.hli.result.Result;
@@ -151,5 +152,15 @@ public class AdminController {
 		int total = adminService.countManager(search);
 		
 		return new ResultDataTotal<List<SellerVO>>(0, "success", sellerList, total);
+	}
+	
+	@RequestMapping("/admin/api/getGoodsOfSeller")
+    public ResultDataTotal<List<MapSellerGoodsVO>> getGoodsOfSeller(@RequestBody SearchVO search) {
+		logger.debug("/api/getGoodsOfSeller--------------------------------------------------");
+		List<MapSellerGoodsVO> goodsList = adminService.getGoodsOfSeller(search);
+		
+		int total = adminService.countGoodsOfSeller(search);
+		
+		return new ResultDataTotal<List<MapSellerGoodsVO>>(0, "success", goodsList, total);
 	}
 }

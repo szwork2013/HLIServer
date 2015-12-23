@@ -55,6 +55,31 @@
 				    </tbody>
 			    </table>
 			</div>
+
+			<!--상품 보기-->
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-list fa-lg"></i> {{company_name}}
+				</div>
+				<table class="table table-striped">
+					<thead>
+			    		<tr>
+			    			<td>상품명</td>
+			    			<td>가격</td>
+			    			<td>수수료</td>
+			    			<td>사용유무</td>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+					    <tr ng-repeat="goods in goodslist">
+						    <td>{{ goods.goods_name}}</td>
+						    <td>{{ goods.sell_price}}</td>
+						    <td>{{ goods.commission}}</td>
+						    <td></td>
+					    </tr>
+				    </tbody>
+			    </table>
+			</div>
 		</div>
 		<div class="col-lg-4">
 			<div class="panel panel-info">

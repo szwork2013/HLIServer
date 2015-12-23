@@ -132,4 +132,16 @@
 	</if>
 </select>
 
+<select id="selectGoodsOfSeller" parameterType="MapSellerGoodsVO" resultType="MapSellerGoodsVO">
+	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price 
+	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
+	WHERE map_seller_goods.seller_id = #{seller_id}
+	LIMIT #{start_index}, #{page_size}
+</select>
+
+<select id="countGoodsOfSeller" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM map_seller_goods
+	WHERE seller_id = #{seller_id}
+</select>
+
 </mapper>
