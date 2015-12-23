@@ -14,4 +14,5 @@ public class MapSellerGoodsVO {
 	private String commission;
 	private String goods_name;
 	private String sell_price;
+	private int use_yn; //0:사용, 1:사용안함
 }

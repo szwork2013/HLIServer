@@ -1,6 +1,7 @@
 package com.hli.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -12,12 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.hli.domain.CouponReqVO;
+import com.hli.domain.SearchVO;
+import com.hli.domain.SellerVO;
+import com.hli.result.ResultDataTotal;
 
 @RestController
 public class CouponController {
 	private static Logger logger = LoggerFactory.getLogger(AdminController.class);
 	private RestTemplate restTemplate;
 	private Map<String, Object> params;
+	
+/*	@RequestMapping("/api/getGoods")
+    public ResultDataTotal<List<SellerVO>> getSellerList(@RequestBody SellerVO seller) {
+		logger.debug("/api/getGoods--------------------------------------------------");
+		List<SellerVO> sellerList = adminService.getSellerList(search);
+		
+		int total = adminService.countManager(search);
+		
+		return new ResultDataTotal<List<SellerVO>>(0, "success", sellerList, total);
+	}*/
 	
 	//쿠폰 발송 OPEN API=====================================================================
 	@RequestMapping("/coupon/api/v1/sendCoupons")
