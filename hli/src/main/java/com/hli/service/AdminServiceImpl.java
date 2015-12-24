@@ -11,6 +11,7 @@ import com.hli.domain.GoodsVO;
 import com.hli.domain.ManagerVO;
 import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
+import com.hli.domain.SellerGoodsVO;
 import com.hli.domain.SellerVO;
 import com.hli.persistence.AdminMapper;
 
@@ -129,6 +130,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int countGoodsOfSeller(SearchVO search) {
 		return adminMapper.countGoodsOfSeller(search);
+	}
+
+	@Override
+	public SellerVO getSeller(SellerVO seller) {
+		return adminMapper.selectSeller(seller);
+	}
+
+	@Override
+	public List<SellerGoodsVO> getAllGoodsOfSeller(SearchVO search) {
+		return adminMapper.selectAllGoodsOfSeller(search);
 	}
 
 }

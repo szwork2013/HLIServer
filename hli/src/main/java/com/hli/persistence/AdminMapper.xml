@@ -132,18 +132,30 @@
 	</if>
 </select>
 
-<select id="selectGoodsOfSeller" parameterType="MapSellerGoodsVO" resultType="MapSellerGoodsVO">
-	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price 
+<select id="selectSeller" parameterType="SellerVO" resultType="SellerVO">
+	SELECT *
+	FROM seller
+	WHERE mid = #{mid} and password = #{password}
+	LIMIT 1;
+</select>
+
+<select id="selectGoodsOfSeller" parameterType="SearchVO" resultType="MapSellerGoodsVO">
+	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price, use_yn
 	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
 	WHERE map_seller_goods.seller_id = #{seller_id} and map_seller_goods.use_yn=0
-	<if test="page_size != 0">
-		LIMIT #{start_index}, #{page_size}
-	</if>
+	LIMIT #{start_index}, #{page_size}
 </select>
 
 <select id="countGoodsOfSeller" parameterType="SearchVO" resultType="Integer">
 	SELECT count(*) FROM map_seller_goods 
 	WHERE seller_id = #{seller_id} and use_yn=0
+</select>
+
+<!-- 판매업체에게 제공되는 상품 정보 리스트 -->
+<select id="selectAllGoodsOfSeller" parameterType="SearchVO" resultType="SellerGoodsVO">
+	SELECT goods.*
+	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
+	WHERE map_seller_goods.seller_id = #{seller_id} and map_seller_goods.use_yn=0
 </select>
 
 </mapper>
