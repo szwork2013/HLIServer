@@ -11,7 +11,7 @@
 				<div class="panel-heading">
 					<i class="fa fa-list fa-lg"></i> 판매업체 목록
 					<div class="pull-right">
-                        <button type="button" class="btn btn-default btn-xs" ng-click="clearAdmin()">판매업체 추가</button>
+                        <button type="button" class="btn btn-default btn-xs" ng-click="clearSeller()">판매업체 추가</button>
                     </div>
 				</div>
 				<table class="table table-striped">
@@ -37,7 +37,7 @@
 						        </button>
 						    </td>
 						    <td>{{ seller.company_name}}</td>
-						    <td>{{ seller.seller_id}}</td>
+						    <td>{{ seller.mid}}</td>
 						    <td>{{ seller.person_name}}</td>
 						    <td>{{ seller.contact}}</td>
 						    <td>{{ sale_status_list[seller.sale_status-1].name}}</td>
@@ -150,7 +150,7 @@
 					</form> 
 					<div class="row" ng-switch="seller_mode">
 							<div class="col-lg-6" ng-switch-when="edit">
-					      		<button type="button" ng-click="modifyAdmin()" class="btn btn-info btn-block"><i class="fa fa-save fa-lg"></i> Save</button>
+					      		<button type="button" ng-click="modifySeller()" class="btn btn-info btn-block"><i class="fa fa-save fa-lg"></i> Save</button>
 					    	</div>
 					    	<div class="col-lg-6" ng-switch-when="edit">
 					      		<button type="button" class="btn btn-info btn-block disabled"><i class="fa fa-plus fa-lg"></i> Add </button>

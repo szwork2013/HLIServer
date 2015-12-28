@@ -117,6 +117,27 @@
 	VALUES(#{seller_id}, #{goods_id}, #{commission});
 </insert>
 
+<update id="updateSeller" parameterType="SellerVO">
+	UPDATE seller
+	<set>
+		<if test="company_name != null">company_name=#{company_name},</if>
+		<if test="mid != null">mid=#{mid},</if>
+		<if test="password != null">password=#{password},</if>
+		<if test="code != null">code=#{code},</if>
+		<if test="person_name != null">person_name=#{person_name},</if>
+		<if test="contact != null">contact=#{contact},</if>
+		<if test="email != null">email=#{email},</if>
+		<if test="allowed_ip != null">allowed_ip=#{allowed_ip},</if>
+		<if test="sale_status != 0">sale_status=#{sale_status}</if>
+	</set>
+	WHERE seller_id = #{seller_id}
+</update>
+
+<delete id="deleteSeller" parameterType="SellerVO">
+	DELETE FROM seller
+	WHERE seller_id = #{seller_id}
+</delete>
+
 <select id="countSeller" parameterType="SearchVO" resultType="Integer">
 	SELECT count(*) FROM manager
 </select>

@@ -30,6 +30,8 @@ public interface AdminMapper {
 	
 	//판매업체 관리
 	public int insertSeller(SellerVO Seller) throws PersistenceException;
+	public int updateSeller(SellerVO Seller) throws PersistenceException;
+	public int deleteSeller(SellerVO Seller) throws PersistenceException;
 	public void insertMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> selectSellerList(SearchVO search);

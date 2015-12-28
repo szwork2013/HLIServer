@@ -82,6 +82,12 @@ app.service('SellerSvc', function($http) {
 	this.addSeller = function(admin) {
 		return $http.post('/admin/api/addSeller', admin);
 	}
+	this.modifySeller = function(admin) {
+		return $http.post('/admin/api/modifySeller', admin);
+	}
+	this.removeSeller = function(admin) {
+		return $http.post('/admin/api/removeSeller', admin);
+	}
 	this.getGoodsListOfSeller = function getGoodsListOfSeller (search) {
 		return $http.post('/admin/api/getGoodsOfSeller', search);
 	}
@@ -332,16 +338,37 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		$scope.seller_mode = "";
 		$scope.seller_mode_text = "판매업체 추가";
 
-		$scope.company_name = null;
 		$scope.seller_id = null;
+		$scope.company_name = null;
+		$scope.mid = null;
+		$scope.password = null;
+		$scope.code = null;
 		$scope.person_name = null;
 		$scope.contact = null;
+		$scope.email = null;
+		$scope.allowed_ip = null;
 		$scope.sale_status = "";
 	}
 
 	$scope.sellerListPageChanged = function() {
 		$scope.getSellerList();
 	};
+	
+	$scope.editSeller = function(seller) {
+		$scope.seller_id = seller.seller_id;
+		$scope.seller_mode = "edit";
+		$scope.seller_mode_text = "판매업체 수정";
+
+		$scope.company_name = seller.company_name;
+		$scope.mid = seller.mid;
+		$scope.password = seller.password;
+		$scope.code = seller.code;
+		$scope.person_name = seller.person_name;
+		$scope.contact = seller.contact;
+		$scope.email = seller.email;
+		$scope.allowed_ip = seller.allowed_ip;
+		$scope.sale_status = seller.sale_status;
+	}
 	
 	$scope.addSeller = function() {
 		var seller = {
@@ -368,6 +395,51 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 				alert("error : " + data.message);
 			}
 		});
+	}
+
+	$scope.modifySeller = function() {
+		var seller = {
+			seller_id: $scope.seller_id,
+			company_name: $scope.company_name,
+			mid: $scope.mid,
+			password: $scope.password,
+			code: $scope.code,
+			person_name: $scope.person_name,
+			contact: $scope.contact,
+			email: $scope.email,
+			allowed_ip: $scope.allowed_ip,
+			sale_status: $scope.sale_status,
+		}
+		
+		SellerSvc.modifySeller(seller)
+		.success(function(data){
+			$scope.clearSeller();
+			$scope.getSellerList();
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.deleteSeller = function(seller) {
+		if ($window.confirm("삭제하시겠습니까?")) {	
+			SellerSvc.removeSeller(seller)
+			.success(function(result) {
+				$scope.currentPageSeller = 1;
+				
+				$scope.clearSeller();
+				$scope.getSellerList();
+			}).error(function(data, status) {
+				if (status == 401) {
+					$rootScope.logout();
+				} else {
+					alert("error : " + data.message);
+				}
+			});
+		};
 	}
 
 	$scope.editGoods = function(seller) {

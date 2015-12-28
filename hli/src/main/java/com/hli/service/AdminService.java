@@ -31,6 +31,8 @@ public interface AdminService {
 	
 	//판매업체 관리
 	public int addSeller(SellerVO seller) throws PersistenceException;
+	public int modifySeller(SellerVO seller) throws PersistenceException;
+	public int removeSeller(SellerVO seller) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> getSellerList(SearchVO search);
 	public SellerVO getSeller(SellerVO seller);

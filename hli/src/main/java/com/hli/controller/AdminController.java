@@ -144,6 +144,30 @@ public class AdminController {
 		} 
 	}
 	
+	@RequestMapping("/admin/api/modifySeller")
+    public Result modifySeller(@RequestBody SellerVO seller) {
+		logger.debug("/api/modifySeller----------------------------------------------------------");
+		
+		long resultCount = adminService.modifySeller(seller);
+		if(resultCount > 0) {
+			return new Result(0, "success");
+		} else {
+			return new Result(100, "update failed");
+		}
+	}
+	
+	@RequestMapping("/admin/api/removeSeller")
+    public Result removeSeller(@RequestBody SellerVO seller) {
+		logger.debug("/api/removeManager----------------------------------------------------------");
+		
+		long resultCount = adminService.removeSeller(seller);
+		if(resultCount > 0) {
+			return new Result(0, "success");
+		} else {
+			return new Result(100, "delete failed");
+		}
+	}
+	
 	@RequestMapping("/admin/api/getSellerList")
     public ResultDataTotal<List<SellerVO>> getSellerList(@RequestBody SearchVO search) {
 		logger.debug("/api/getSellerList--------------------------------------------------");

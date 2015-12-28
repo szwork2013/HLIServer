@@ -113,6 +113,16 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public int modifySeller(SellerVO seller) throws PersistenceException {
+		return adminMapper.updateSeller(seller);
+	}
+
+	@Override
+	public int removeSeller(SellerVO seller) throws PersistenceException {
+		return adminMapper.deleteSeller(seller);
+	}
+
+	@Override
 	public int countSeller(SearchVO search) {
 		return adminMapper.countSeller(search);
 	}
