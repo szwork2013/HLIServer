@@ -179,4 +179,20 @@
 	WHERE map_seller_goods.seller_id = #{seller_id} and map_seller_goods.use_yn=0
 </select>
 
+<!-- 발송정보 저장 -->
+<select id="insertSend" parameterType="SendVO">
+	INSERT INTO send(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
+		tr_id, user_id, title, msg, status_code, result_code)
+	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
+		#{tr_id}, #{user_id}, #{title}, #{msg}, #{status_code}, #{result_code});
+</select>
+
+<!-- 테스트 발송정보 저장 -->
+<select id="insertTestSend" parameterType="SendVO">
+	INSERT INTO testsend(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
+		tr_id, user_id, title, msg, status_code, result_code)
+	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
+		#{tr_id}, #{user_id}, #{title}, #{msg}, #{status_code}, #{result_code});
+</select>
+
 </mapper>

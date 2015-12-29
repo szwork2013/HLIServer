@@ -10,6 +10,7 @@ import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerGoodsVO;
 import com.hli.domain.SellerVO;
+import com.hli.domain.SendVO;
 
 public interface AdminService {
 	public int addGoods(GoodsVO goods);
@@ -41,4 +42,8 @@ public interface AdminService {
 	
 	//open api
 	public List<SellerGoodsVO> getAllGoodsOfSeller(SearchVO search);
+	
+	//발송 정보
+	public long addSend(SendVO send);
+	public long addTestSend(SendVO send);
 }

@@ -13,6 +13,7 @@ import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerGoodsVO;
 import com.hli.domain.SellerVO;
+import com.hli.domain.SendVO;
 import com.hli.persistence.AdminMapper;
 
 @Service
@@ -150,6 +151,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<SellerGoodsVO> getAllGoodsOfSeller(SearchVO search) {
 		return adminMapper.selectAllGoodsOfSeller(search);
+	}
+
+	@Override
+	public long addSend(SendVO send) {
+		return adminMapper.insertSend(send);
+	}
+
+	@Override
+	public long addTestSend(SendVO send) {
+		return adminMapper.insertTestSend(send);
 	}
 
 }
