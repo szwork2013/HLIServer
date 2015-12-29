@@ -182,9 +182,9 @@
 <!-- 발송정보 저장 -->
 <insert id="insertSend" parameterType="SendVO">
 	INSERT INTO send(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
-		tr_id, user_id, title, msg, status_code, result_code)
+		tr_id, userid, title, msg, status_code, result_code)
 	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
-		#{tr_id}, #{user_id}, #{title}, #{msg}, #{status_code}, #{result_code});
+		#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
 </insert>
 
 <!-- 테스트 발송정보 저장 -->
