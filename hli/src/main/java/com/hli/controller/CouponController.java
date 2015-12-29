@@ -121,6 +121,7 @@ public class CouponController {
 		//발송정보 세팅
 		sendVO.setGoods_count(couponReq.getGoods_count());
 		sendVO.setSell_price(couponReq.getSell_price());
+		sendVO.setGoods_count(couponReq.getGoods_count());
 		sendVO.setRecv_phone(couponReq.getRecv_phone());
 		sendVO.setSend_phone(couponReq.getSend_phone());
 		sendVO.setTr_id(couponReq.getTr_id());
