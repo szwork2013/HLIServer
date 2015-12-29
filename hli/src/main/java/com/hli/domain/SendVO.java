@@ -13,7 +13,7 @@ public class SendVO {
 	private String recv_phone;
 	private String send_phone;
 	private String tr_id;
-	private String user_id;
+	private String userid;
 	private String title;
 	private String msg;
 	private String status_code;
