@@ -117,6 +117,15 @@
 	VALUES(#{seller_id}, #{goods_id}, #{commission});
 </insert>
 
+<update id="updateMapSellerGoods" parameterType="MapSellerGoodsVO">
+	UPDATE map_seller_goods
+	<set>
+		<if test="commission != null">commission=#{commission},</if>
+		use_yn=#{use_yn}
+	</set>
+	WHERE seller_id = #{seller_id} and goods_id = #{goods_id}
+</update>
+
 <update id="updateSeller" parameterType="SellerVO">
 	UPDATE seller
 	<set>

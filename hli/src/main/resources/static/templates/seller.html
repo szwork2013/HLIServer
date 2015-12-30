@@ -68,15 +68,39 @@
 			    			<td>가격</td>
 			    			<td>수수료</td>
 			    			<td>사용유무</td>
+			    			<td>편집</td>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
 					    <tr ng-repeat="goods in goodslist">
 						    <td>{{ goods.goods_name}}</td>
 						    <td>{{ goods.sell_price}}</td>
-						    <td>{{ goods.commission}}</td>
-						    <td>{{ goods.use_yn}}</td>
-					    </tr>
+						    <td>
+						    	<span editable-text="goods.commission" e-name="commission" e-form="rowform">{{ goods.commission}}</span>
+						    </td>
+						    <td>
+						    	<span editable-select="goods.use_yn" e-name="use_yn" e-form="rowform" e-ng-options="s.value as s.text for s in use_yn">{{ use_yn[goods.use_yn].text}}</span>
+						    </td>
+							<td style="white-space: nowrap">
+								<!-- form -->
+								<form editable-form name="rowform" onbeforesave="modifyMapSellerGoods($data, goods.seller_id, goods.goods_id)"
+									ng-show="rowform.$visible" class="form-buttons form-inline">
+									<button type="submit" ng-disabled="rowform.$waiting"
+										class="btn btn-default btn-xs">
+										<span class="glyphicon glyphicon-ok">
+										저장</button>
+									<button type="button" ng-disabled="rowform.$waiting"
+										ng-click="rowform.$cancel()" class="btn btn-default btn-xs">
+										<span class="glyphicon glyphicon-remove">
+										취소</button>
+								</form>
+								<div class="buttons" ng-show="!rowform.$visible">
+									<button class="btn btn-default btn-xs" ng-click="rowform.$show()">
+										<span class="glyphicon glyphicon-pencil"></span>수정
+									</button>
+								</div>
+							</td>
+						</tr>
 				    </tbody>
 			    </table>
 			</div>

@@ -37,6 +37,7 @@ public interface AdminService {
 	public int countSeller(SearchVO search);
 	public List<SellerVO> getSellerList(SearchVO search);
 	public SellerVO getSeller(SellerVO seller);
+	public int modifyMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
 	public List<MapSellerGoodsVO> getGoodsOfSeller(SearchVO search);
 	public int countGoodsOfSeller(SearchVO search);
 	

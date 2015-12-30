@@ -3,7 +3,7 @@ $(function() {
 });
 
 var app = angular.module('app', [
-    'ngRoute', 'ui.bootstrap', 'ngCookies', 'toaster', 'ngAnimate'
+    'ngRoute', 'ui.bootstrap', 'ngCookies', 'toaster', 'ngAnimate', "xeditable"
 ]);
 
 app.run(['$rootScope', '$cookieStore', '$http', 'toaster', function($rootScope, $cookieStore, $http, toaster) {
@@ -90,6 +90,9 @@ app.service('SellerSvc', function($http) {
 	}
 	this.getGoodsListOfSeller = function getGoodsListOfSeller (search) {
 		return $http.post('/admin/api/getGoodsOfSeller', search);
+	}
+	this.modifyMapSellerGoods = function modifyMapSellerGoods (map) {
+		return $http.post('/admin/api/modifyMapSellerGoods', map);
 	}
 });
 
@@ -476,6 +479,26 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 			}
 		});
 	}
+	
+	$scope.use_yn = [
+		{value: 0, text: "사용"},
+		{value: 1, text: "미사용"},
+	];
+	
+	$scope.modifyMapSellerGoods = function(data, seller_id, goods_id) {
+	    data.seller_id = seller_id;
+	    data.goods_id = goods_id;
+	    SellerSvc.modifyMapSellerGoods(data)
+		.success(function(datas, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	};
 	
 }]);
 

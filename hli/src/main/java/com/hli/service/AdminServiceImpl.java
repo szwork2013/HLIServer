@@ -134,6 +134,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public int modifyMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException {
+		return adminMapper.updateMapSellerGoods(map);
+	}
+	
+	@Override
 	public List<MapSellerGoodsVO> getGoodsOfSeller(SearchVO search) {
 		return adminMapper.selectGoodsOfSeller(search);
 	}

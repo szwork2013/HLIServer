@@ -179,6 +179,18 @@ public class AdminController {
 		return new ResultDataTotal<List<SellerVO>>(0, "success", sellerList, total);
 	}
 	
+	@RequestMapping("/admin/api/modifyMapSellerGoods")
+    public Result modifyMapSellerGoods(@RequestBody MapSellerGoodsVO map) {
+		logger.debug("/api/modifyMapSellerGoods----------------------------------------------------------");
+		
+		long resultCount = adminService.modifyMapSellerGoods(map);
+		if(resultCount > 0) {
+			return new Result(0, "success");
+		} else {
+			return new Result(100, "update failed");
+		}
+	}
+	
 	@RequestMapping("/admin/api/getGoodsOfSeller")
     public ResultDataTotal<List<MapSellerGoodsVO>> getGoodsOfSeller(@RequestBody SearchVO search) {
 		logger.debug("/api/getGoodsOfSeller--------------------------------------------------");

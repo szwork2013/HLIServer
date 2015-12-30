@@ -34,6 +34,7 @@ public interface AdminMapper {
 	public int updateSeller(SellerVO Seller) throws PersistenceException;
 	public int deleteSeller(SellerVO Seller) throws PersistenceException;
 	public void insertMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
+	public int updateMapSellerGoods(MapSellerGoodsVO map) throws PersistenceException;
 	public int countSeller(SearchVO search);
 	public List<SellerVO> selectSellerList(SearchVO search);
 	public SellerVO selectSeller(SellerVO seller);
