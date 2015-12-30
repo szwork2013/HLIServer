@@ -46,4 +46,8 @@ public interface AdminService {
 	//발송 정보
 	public long addSend(SendVO send);
 	public long addTestSend(SendVO send);
+	public List<SendVO> getSendList(SearchVO search);
+	public List<SendVO> getTestSendList(SearchVO search); 
+	public int countSendList(SearchVO search);
+	public int countTestSendList(SearchVO search);
 }

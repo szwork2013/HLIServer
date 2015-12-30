@@ -46,4 +46,8 @@ public interface AdminMapper {
 	//발송 정보
 	public long insertSend(SendVO send);
 	public long insertTestSend(SendVO send);
+	public List<SendVO> selectSendList(SearchVO search);
+	public List<SendVO> selectTestSendList(SearchVO search); 
+	public int countSendList(SearchVO search);
+	public int countTestSendList(SearchVO search);
 }

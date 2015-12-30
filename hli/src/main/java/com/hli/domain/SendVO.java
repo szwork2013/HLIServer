@@ -19,4 +19,7 @@ public class SendVO {
 	private String status_code;
 	private String result_code;
 	private String exchange_code;
+	
+	private String company_name;
+	private String brand_name;
 }

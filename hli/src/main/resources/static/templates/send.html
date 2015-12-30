@@ -1,0 +1,89 @@
+<div>
+	<div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">발송 관리</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+        	<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-list fa-lg"></i> 실 발송 목록
+				</div>
+				<table class="table table-striped">
+					<thead>
+			    		<tr>
+			    			<td>발송시간</td>
+			    			<td>판매업체</td>
+			    			<td>상품명</td>
+			    			<td>판매가격</td>
+			    			<td>상품수량</td>
+			    			<td>tr_id</td>
+			    			<td>수신자번호</td>
+			    			<td>발송결과</td>
+			    			<td>결과메시지</td>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+					    <tr ng-repeat="send in sendList">
+			    			<td>{{send.created}}</td>
+			    			<td>{{send.company_name}}</td>
+			    			<td>{{send.brand_name}}</td>
+			    			<td>{{send.sell_price}}</td>
+			    			<td>{{send.goods_count}}</td>
+			    			<td>{{send.tr_id}}</td>
+			    			<td>{{send.recv_phone}}</td>
+			    			<td>{{send.result_code}}</td>
+			    			<td>{{send.status_code}}</td>
+					    </tr>
+					    <tr>
+					    	<td colspan="9" style="text-align:center">
+					    		<pagination boundary-links="true" total-items="totalSendListCount" ng-model="currentPageSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="sendListPageChanged()"></pagination>
+					    	</td>
+					    </tr>
+				    </tbody>
+			    </table>
+			</div>
+			
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<i class="fa fa-list fa-lg"></i> 테스트 발송 목록
+				</div>
+				<table class="table table-striped">
+					<thead>
+			    		<tr>
+			    			<td>발송시간</td>
+			    			<td>판매업체</td>
+			    			<td>상품명</td>
+			    			<td>판매가격</td>
+			    			<td>상품수량</td>
+			    			<td>tr_id</td>
+			    			<td>수신자번호</td>
+			    			<td>발송결과</td>
+			    			<td>결과메시지</td>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+					    <tr ng-repeat="testSend in testSendList">
+			    			<td>{{testSend.created}}</td>
+			    			<td>{{testSend.company_name}}</td>
+			    			<td>{{testSend.brand_name}}</td>
+			    			<td>{{testSend.sell_price}}</td>
+			    			<td>{{testSend.goods_count}}</td>
+			    			<td>{{testSend.tr_id}}</td>
+			    			<td>{{testSend.recv_phone}}</td>
+			    			<td>{{testSend.result_code}}</td>
+			    			<td>{{testSend.status_code}}</td>
+					    </tr>
+					    <tr>
+					    	<td colspan="9" style="text-align:center">
+					    		<pagination boundary-links="true" total-items="totalTestSendListCount" ng-model="currentPageTestSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="testSendListPageChanged()"></pagination>
+					    	</td>
+					    </tr>
+				    </tbody>
+			    </table>
+			</div>
+		</div>
+	</div>
+</div>

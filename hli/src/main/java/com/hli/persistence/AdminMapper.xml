@@ -186,6 +186,19 @@
 	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
 		#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
 </insert>
+<!-- 관리자화면: 발송정보 리스트 가져오기 -->
+<select id="selectSendList" parameterType="SearchVO" resultType="SendVO">
+	SELECT send.*, seller.company_name, goods.brand_name 
+	FROM send inner join seller on send.seller_id = seller.seller_id
+		inner join goods on send.goods_id = goods.goods_id
+	ORDER BY created desc
+	<if test="page_size != 0">
+		LIMIT #{start_index}, #{page_size}
+	</if>
+</select>
+<select id="countSendList" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM send
+</select>
 
 <!-- 테스트 발송정보 저장 -->
 <insert id="insertTestSend" parameterType="SendVO">
@@ -194,5 +207,19 @@
 	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
 		#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
 </insert>
+
+<!-- 관리자화면: 테스트발송정보 리스트 가져오기 -->
+<select id="selectTestSendList" parameterType="SearchVO" resultType="SendVO">
+	SELECT testsend.*, seller.company_name, goods.brand_name 
+	FROM testsend inner join seller on testsend.seller_id = seller.seller_id
+		inner join goods on testsend.goods_id = goods.goods_id
+	ORDER BY created desc
+	<if test="page_size != 0">
+		LIMIT #{start_index}, #{page_size}
+	</if>
+</select>
+<select id="countTestSendList" parameterType="SearchVO" resultType="Integer">
+	SELECT count(*) FROM testsend
+</select>
 
 </mapper>

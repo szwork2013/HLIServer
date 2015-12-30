@@ -16,6 +16,7 @@ import com.hli.domain.ManagerVO;
 import com.hli.domain.MapSellerGoodsVO;
 import com.hli.domain.SearchVO;
 import com.hli.domain.SellerVO;
+import com.hli.domain.SendVO;
 import com.hli.result.Result;
 import com.hli.result.ResultData;
 import com.hli.result.ResultDataTotal;
@@ -186,5 +187,26 @@ public class AdminController {
 		int total = adminService.countGoodsOfSeller(search);
 		
 		return new ResultDataTotal<List<MapSellerGoodsVO>>(0, "success", goodsList, total);
+	}
+	
+	//발송정보 리스트 가져오기
+	@RequestMapping("/admin/api/getSendList")
+    public ResultDataTotal<List<SendVO>> getSendList(@RequestBody SearchVO search) {
+		logger.debug("/api/getSendList--------------------------------------------------");
+		List<SendVO> sendList = adminService.getSendList(search);
+		
+		int total = adminService.countSendList(search);
+		
+		return new ResultDataTotal<List<SendVO>>(0, "success", sendList, total);
+	}
+	//테스트발송정보 리스트 가져오기
+	@RequestMapping("/admin/api/getTestSendList")
+    public ResultDataTotal<List<SendVO>> getTestSendList(@RequestBody SearchVO search) {
+		logger.debug("/api/getTestSendList--------------------------------------------------");
+		List<SendVO> sendList = adminService.getTestSendList(search);
+		
+		int total = adminService.countSendList(search);
+		
+		return new ResultDataTotal<List<SendVO>>(0, "success", sendList, total);
 	}
 }

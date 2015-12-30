@@ -163,4 +163,24 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.insertTestSend(send);
 	}
 
+	@Override
+	public List<SendVO> getSendList(SearchVO search) {
+		return adminMapper.selectSendList(search);
+	}
+
+	@Override
+	public List<SendVO> getTestSendList(SearchVO search) {
+		return adminMapper.selectTestSendList(search);
+	}
+
+	@Override
+	public int countSendList(SearchVO search) {
+		return adminMapper.countSendList(search);
+	}
+
+	@Override
+	public int countTestSendList(SearchVO search) {
+		return adminMapper.countTestSendList(search);
+	}
+
 }

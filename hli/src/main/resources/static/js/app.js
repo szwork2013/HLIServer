@@ -93,6 +93,16 @@ app.service('SellerSvc', function($http) {
 	}
 });
 
+app.service('SendSvc', function($http) {
+	this.getSendList = function(search) {
+		return $http.post('/admin/api/getSendList', search);
+	}
+	
+	this.getTestSendList = function(search) {
+		return $http.post('/admin/api/getTestSendList', search);
+	}
+});
+
 
 app.directive('calendar', function () {
     return {
@@ -467,4 +477,63 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		});
 	}
 	
+}]);
+
+app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'SendSvc', function ($scope, $rootScope, $window, $cookieStore, SendSvc) {
+	//실발송------------------
+	$scope.sendList = [];
+	
+	$scope.currentPageSend = 1;
+	$scope.totalSendListCount = 0;
+
+
+	$scope.getSendList = function(){
+		SendSvc.getSendList({start_index:($scope.currentPageSend - 1) * 10, page_size:10})
+		.success(function(datas, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.sendList = datas.data;
+			$scope.totalSendListCount = datas.total;
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.getSendList();
+
+	$scope.sendListPageChanged = function() {
+		$scope.getSendList();
+	};
+	
+	//테스트발송-----------
+	$scope.testSendList = [];
+	
+	$scope.currentPageTestSend = 1;
+	$scope.totalTestSendListCount = 0;
+
+
+	$scope.getTestSendList = function(){
+		SendSvc.getTestSendList({start_index:($scope.currentPageTestSend - 1) * 10, page_size:10})
+		.success(function(datas, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.testSendList = datas.data;
+			$scope.totalTestSendListCount = datas.total;
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.getTestSendList();
+
+	$scope.testSendListPageChanged = function() {
+		$scope.getTestSendList();
+	};
+
 }]);
