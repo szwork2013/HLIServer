@@ -300,6 +300,7 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 		$scope.market_price = goods.market_price;
 		$scope.adj_price = goods.adj_price;
 		$scope.goods_code = goods.goods_code;
+		$scope.thumbnail = goods.thumbnail;
 		$scope.goods_info = goods.goods_info;
 		$scope.use_note = goods.use_note;
 		$scope.use_term = goods.use_term;

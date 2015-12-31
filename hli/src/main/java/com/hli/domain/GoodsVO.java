@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class GoodsVO {
+	private boolean isReal; //실상품 or 테스트 상품 여부
+	
 	private int goods_id;
 	private int provider; //공급업체 1:M12, 2:coup
 	private String brand_name;

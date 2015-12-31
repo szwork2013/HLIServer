@@ -21,7 +21,6 @@
 			    			<td>상품명</td>
 			    			<td>브랜드명</td>
 			    			<td>판매가격</td>
-			    			<td>수수료</td>
 			    			<td>업데이트</td>
 			    			<td>판매처</td>
 			    		</tr>
@@ -32,7 +31,6 @@
 						    <td>{{ goods.goods_name}}</td>
 						    <td>{{ goods.brand_name}}</td>
 						    <td>{{ goods.sell_price}}</td>
-						    <td></td>
 						    <td>{{ goods.updated}}</td>
 						    <td>보기</td>
 					    </tr>
@@ -64,7 +62,7 @@
 				      	<label for="titleText" class="col-sm-8 graybox text-left">{{market_price}}</label>
 				  	</div>
 				  	<div class="col-sm-12 offset-btm-10"">
-				    	<label for="titleText" class="col-sm-4 graybox text-right">수수료제외</label>
+				    	<label for="titleText" class="col-sm-4 graybox text-right">조정가격</label>
 				      	<label for="titleText" class="col-sm-8 graybox text-left">{{adj_price}}</label>
 				  	</div>
 				  	<div class="col-sm-12 offset-btm-10"">
@@ -74,6 +72,10 @@
 				  	<div class="col-sm-12 offset-btm-10"">
 				    	<label for="titleText" class="col-sm-4 graybox text-right">상품정보</label>
 				      	<label for="titleText" class="col-sm-8 graybox text-left">{{goods_info}}</label>
+				  	</div>
+				  	<div class="col-sm-12 offset-btm-10"">
+				    	<label for="titleText" class="col-sm-4 graybox text-right">이미지</label>
+				      	<label for="titleText" class="col-sm-8 graybox text-left">{{thumbnail}}</label>
 				  	</div>
 				  	<div class="col-sm-12 offset-btm-10"">
 				    	<label for="titleText" class="col-sm-4 graybox text-right">비고</label>

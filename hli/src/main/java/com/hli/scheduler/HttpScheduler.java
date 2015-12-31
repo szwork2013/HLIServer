@@ -48,20 +48,32 @@ public class HttpScheduler {
 		log = LoggerFactory.getLogger(HttpScheduler.class);
 	}
 	
-	//매일 새벽 2시에 0,5,10분에 실행 
+	//M12 실상품가져오기
 	@Scheduled(cron="0 0 02 * * ?")
 	public void scheduleM12() {
-		getProductOfM12();
+		getProductOfM12(true);
 	}
 	
-	//매일 새벽 3시에 0,1 분에 실행 
+	//M12 실상품가져오기
+	@Scheduled(cron="0 30 02 * * ?")
+	public void scheduleM12Test() {
+		getProductOfM12(false);
+	}
+	
+	//쿠프 실상품
 	@Scheduled(cron="0 0 03 * * ?")
 	public void scheduleCoup() {
-		getProductOfCoupList();
+		getProductOfCoupList(true);
+	}
+	
+	//쿠프 테스트상품
+	@Scheduled(cron="0 30 03 * * ?")
+	public void scheduleCoupTest() {
+		getProductOfCoupList(false);
 	}
 	
 	//쿠프 전체 상품 코드 가져오기 
-	public void getProductOfCoupList() {	
+	public void getProductOfCoupList(boolean isReal) {	
 		OnReceiveListener listener = new OnReceiveListener() {
 			
 			@Override
@@ -99,7 +111,11 @@ public class HttpScheduler {
 							}
 							
 							for(String couponCode : goodsList.keySet()) {
-								getProductOfCoup(couponCode);
+								if(isReal) {
+									getProductOfCoup(couponCode, true);
+								} else {
+									getProductOfCoup(couponCode, false);
+								}
 							}
 						} 
 					} catch (IOException io) {
@@ -117,7 +133,13 @@ public class HttpScheduler {
 		HttpClient client = new HttpClient(false, handler);
 		
 		//보낼 데이터 설정
-		String url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
+		String url;
+		if (isReal) {
+			//url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
+			return;
+		} else {
+			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
+		}
 		URI uri;
 		try {
 			uri = new URI(url);
@@ -137,7 +159,7 @@ public class HttpScheduler {
 	}
 	
 	//쿠프 개별 상품 가져오기
-	public void getProductOfCoup(String couponCode) {	
+	public void getProductOfCoup(String couponCode, boolean isReal) {	
 		OnReceiveListener listener = new OnReceiveListener() {
 			@Override
 			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -175,6 +197,13 @@ public class HttpScheduler {
 							goods.setGoods_info(rootNode.getChildText("USE_AREA",rootNode.getNamespace()));
 							goods.setUse_note(rootNode.getChildText("USE_NOTE",rootNode.getNamespace()));
 							goods.setUse_term(rootNode.getChildText("USE_TERM",rootNode.getNamespace()));
+							
+							if(isReal) {
+								goods.setReal(true);
+							} else {
+								goods.setReal(false);
+							}
+							
 							System.out.println("goods:" + goods);
 							
 							adminService.saveGoods(goods);
@@ -194,7 +223,14 @@ public class HttpScheduler {
 		HttpClient client = new HttpClient(false, handler);
 		
 		//보낼 데이터 설정
-		String url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" + couponCode;
+		String url;
+		if(isReal) {
+			//상용 유알엘
+			return;
+		} else {
+			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" + couponCode;
+		}
+
 		try {
 			URI uri = new URI(url);
 			FullHttpRequest request = new DefaultFullHttpRequest(
@@ -213,7 +249,7 @@ public class HttpScheduler {
 	}
 	
 	//M12 상품 정보 가져오기-----------------------------------------------------------------------------------------
-	public void getProductOfM12() {
+	public void getProductOfM12(boolean isReal) {
 		OnReceiveListener listener = new OnReceiveListener() {
 			@Override
 			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -258,6 +294,12 @@ public class HttpScheduler {
 							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
 							goods.setGoods_info(node.getChildText("GOODS_INFO"));
+							
+							if(isReal) {
+								goods.setReal(true);
+							} else {
+								goods.setReal(false);
+							}
 							System.out.println("goods:" + goods);
 
 							adminService.saveGoods(goods);
@@ -278,7 +320,13 @@ public class HttpScheduler {
 		HttpClient client = new HttpClient(false, handler);
 		
 		//보낼 데이터 설정
-		String url = "http://web6.m12.co.kr:12101/app/dev/goods_list_total.php?marketcode=HLINTNL01";
+		String url;
+		if (isReal) {
+			url = "http://web6.m12.co.kr:12101/app/goods_list_total.php?marketcode=HLINTNL01";
+		} else {
+			url = "http://web6.m12.co.kr:12101/app/dev/goods_list_total.php?marketcode=HLINTNL01";
+		}
+		
 		//String url = "http://web6.m12.co.kr:12101/app/dev/goods_list_total.php";
 		URI uri;
 		try {
