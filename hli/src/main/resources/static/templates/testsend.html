@@ -26,20 +26,20 @@
 			    		</tr>
 			    	</thead>
 			    	<tbody>
-					    <tr ng-repeat="testSend in testSendList">
-			    			<td>{{testSend.created}}</td>
-			    			<td>{{testSend.company_name}}</td>
-			    			<td>{{testSend.brand_name}}</td>
-			    			<td>{{testSend.sell_price}}</td>
-			    			<td>{{testSend.goods_count}}</td>
-			    			<td>{{testSend.tr_id}}</td>
-			    			<td>{{testSend.recv_phone}}</td>
-			    			<td>{{testSend.result_code}}</td>
-			    			<td>{{testSend.status_code}}</td>
+					    <tr ng-repeat="send in sendList">
+			    			<td>{{send.created}}</td>
+			    			<td>{{send.company_name}}</td>
+			    			<td>{{send.brand_name}}</td>
+			    			<td>{{send.sell_price}}</td>
+			    			<td>{{send.goods_count}}</td>
+			    			<td>{{send.tr_id}}</td>
+			    			<td>{{send.recv_phone}}</td>
+			    			<td>{{send.result_code}}</td>
+			    			<td>{{send.status_code}}</td>
 					    </tr>
 					    <tr>
 					    	<td colspan="9" style="text-align:center">
-					    		<pagination boundary-links="true" total-items="totalTestSendListCount" ng-model="currentPageTestSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="testSendListPageChanged()"></pagination>
+					    		<pagination boundary-links="true" total-items="totalSendListCount" ng-model="currentPageSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="sendListPageChanged()"></pagination>
 					    	</td>
 					    </tr>
 				    </tbody>
