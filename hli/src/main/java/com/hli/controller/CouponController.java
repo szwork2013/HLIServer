@@ -244,14 +244,14 @@ public class CouponController {
 				logger.debug(rootNode.getName());
 				String resultCode = rootNode.getChild("RESULTCODE", rootNode.getNamespace()).getText();
 				String resultMsg = rootNode.getChild("RESULTMSG", rootNode.getNamespace()).getText();
-				String couponnumber = rootNode.getChild("COUPONNUMBER", rootNode.getNamespace()).getText();
-				String pinnumber = rootNode.getChild("PINNUMBER", rootNode.getNamespace()).getText();
+				//String couponnumber = rootNode.getChild("COUPONNUMBER", rootNode.getNamespace()).getText();
+				//String pinnumber = rootNode.getChild("PINNUMBER", rootNode.getNamespace()).getText();
 				
 				//쿠폰 발송 상태 저장
 				sendVO.setResult_code(resultCode);
 				sendVO.setStatus_code(resultMsg);
-				sendVO.setCouponnumber(couponnumber);
-				sendVO.setPinnumber(pinnumber);
+				//sendVO.setCouponnumber(couponnumber);
+				//sendVO.setPinnumber(pinnumber);
 			
 				logger.debug(sendVO.toString());
 				if(isReal) {
