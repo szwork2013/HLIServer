@@ -294,12 +294,8 @@ public class HttpScheduler {
 							goods.setMarket_price(node.getChildText("MARKET_PRICE"));
 							goods.setSell_price(node.getChildText("SELL_PRICE"));
 							goods.setGoods_info(node.getChildText("GOODS_INFO"));
-							
-							if(isReal) {
-								goods.setReal(true);
-							} else {
-								goods.setReal(false);
-							}
+							goods.setReal(isReal);
+
 							System.out.println("goods:" + goods);
 
 							adminService.saveGoods(goods);

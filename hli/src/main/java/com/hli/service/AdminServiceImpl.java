@@ -34,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void saveGoods(GoodsVO inGoods) {
-		System.out.println("saveGoods:" + inGoods.getGoods_code());
+		System.out.println("saveGoods:" + inGoods);
 		GoodsVO goods = getGoods(inGoods);
 		if(goods == null) {
 			//insert

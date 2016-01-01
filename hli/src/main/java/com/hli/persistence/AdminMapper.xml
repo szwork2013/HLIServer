@@ -18,7 +18,15 @@
 </insert>
 
 <update id="updateGoods" parameterType="GoodsVO">
-	UPDATE goods
+	<choose>
+	    <when test="isReal == true">
+			UPDATE goods
+		</when>
+		<otherwise>
+			UPDATE testgoods
+		</otherwise>
+	</choose>
+	
 	<set>
 		updated = now(),
 		<if test="provider != 0">provider=#{provider},</if>
@@ -37,20 +45,44 @@
 </update>
 
 <select id="selectGoods" parameterType="GoodsVO" resultType="GoodsVO">
-	SELECT * FROM goods 
+	<choose>
+	    <when test="isReal == true">
+			SELECT * FROM goods 
+		</when>
+		<otherwise>
+			SELECT * FROM testgoods 
+		</otherwise>
+	</choose>
+	
 	WHERE goods_code = #{goods_code}
 	Limit 1
 </select>
 
 <select id="selectGoodsList" parameterType="SearchVO" resultType="GoodsVO">
-	SELECT * FROM goods
+	<choose>
+	    <when test="isReal == true">
+			SELECT * FROM goods 
+		</when>
+		<otherwise>
+			SELECT * FROM testgoods 
+		</otherwise>
+	</choose>
+	
 	<if test="page_size != 0">
 		LIMIT #{start_index}, #{page_size}
 	</if>
 </select>
 
 <select id="countGoods" parameterType="SearchVO" resultType="Integer">
-	SELECT count(*) FROM goods
+	<choose>
+	    <when test="isReal == true">
+			SELECT count(*) FROM goods
+		</when>
+		<otherwise>
+			SELECT count(*) FROM testgoods
+		</otherwise>
+	</choose>
+	
 </select>
 
 

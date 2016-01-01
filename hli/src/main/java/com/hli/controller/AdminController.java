@@ -38,17 +38,32 @@ public class AdminController {
 		return "Hello test";
 	}
 	
-	//M12 상품 업데이트
-	@RequestMapping("/admin/api/getM12GoodsList")
-	public Result getM12Goods() {
-		scheduler.getProductOfM12();
+	//M12 테스트상품 업데이트
+	@RequestMapping("/admin/api/getM12GoodsListTest")
+	public Result getM12GoodsTest() {
+		scheduler.getProductOfM12(false);
 		return new Result(0, "success");
 	}
 	
-	//M12 상품 업데이트
+	//M12 실상품 업데이트
+	@RequestMapping("/admin/api/getM12GoodsList")
+	public Result getM12Goods() {
+		scheduler.getProductOfM12(true);
+		return new Result(0, "success");
+	}
+	
+	//Coup 테스트상품 업데이트
+	@RequestMapping("/admin/api/getCoupGoodsListTest")
+	public Result getCoupGoodsListTest() {
+		scheduler.getProductOfCoupList(false);
+		
+		return new Result(0, "success");
+	}
+	
+	//Coup 실상품 업데이트
 	@RequestMapping("/admin/api/getCoupGoodsList")
 	public Result getCoupGoodsList() {
-		scheduler.getProductOfCoupList();
+		scheduler.getProductOfCoupList(true);
 		
 		return new Result(0, "success");
 	}
