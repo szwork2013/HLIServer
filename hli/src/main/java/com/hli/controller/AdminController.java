@@ -72,6 +72,7 @@ public class AdminController {
 	@RequestMapping("/admin/api/getGoodsList")
     public ResultDataTotal<List<GoodsVO>> getGoodsList(@RequestBody SearchVO search) {
 		logger.debug("/api/getGoodsList--------------------------------------------------");
+		logger.debug("search:" + search);
 		List<GoodsVO> goodsList = adminService.getGoodsList(search);
 		
 		int total = adminService.countGoods(search);

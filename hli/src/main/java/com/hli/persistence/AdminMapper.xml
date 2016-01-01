@@ -161,8 +161,7 @@
 <update id="updateMapSellerGoods" parameterType="MapSellerGoodsVO">
 	UPDATE map_seller_goods
 	<set>
-		<if test="commission != null">commission=#{commission},</if>
-		use_yn=#{use_yn}
+		<if test="commission != null">commission=#{commission}</if>
 	</set>
 	WHERE seller_id = #{seller_id} and goods_id = #{goods_id}
 </update>
@@ -211,65 +210,83 @@
 </select>
 
 <select id="selectGoodsOfSeller" parameterType="SearchVO" resultType="MapSellerGoodsVO">
-	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price, use_yn
+	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price
 	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
-	WHERE map_seller_goods.seller_id = #{seller_id} and map_seller_goods.use_yn=0
+	WHERE map_seller_goods.seller_id = #{seller_id}
 	LIMIT #{start_index}, #{page_size}
 </select>
 
 <select id="countGoodsOfSeller" parameterType="SearchVO" resultType="Integer">
 	SELECT count(*) FROM map_seller_goods 
-	WHERE seller_id = #{seller_id} and use_yn=0
+	WHERE seller_id = #{seller_id}
 </select>
 
 <!-- 판매업체에게 제공되는 상품 정보 리스트 -->
 <select id="selectAllGoodsOfSeller" parameterType="SearchVO" resultType="SellerGoodsVO">
-	SELECT goods.*
-	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
-	WHERE map_seller_goods.seller_id = #{seller_id} and map_seller_goods.use_yn=0
+	<choose>
+	    <when test="isReal == true">
+			SELECT *
+			FROM goods
+			WHERE use_yn=0
+		</when>
+		<otherwise>
+			SELECT *
+			FROM testgoods
+			WHERE use_yn=0
+		</otherwise>
+	</choose>
 </select>
 
 <!-- 발송정보 저장 -->
 <insert id="insertSend" parameterType="SendVO">
-	INSERT INTO send(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
-		tr_id, userid, title, msg, status_code, result_code)
-	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
-		#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
+	<choose>
+	    <when test="isReal == true">
+			INSERT INTO send(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
+				tr_id, userid, title, msg, status_code, result_code)
+			VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
+				#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
+		</when>
+		<otherwise>
+			INSERT INTO testsend(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
+				tr_id, userid, title, msg, status_code, result_code)
+			VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
+				#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
+		</otherwise>
+	</choose>
+
 </insert>
+
 <!-- 관리자화면: 발송정보 리스트 가져오기 -->
 <select id="selectSendList" parameterType="SearchVO" resultType="SendVO">
-	SELECT send.*, seller.company_name, goods.brand_name 
-	FROM send inner join seller on send.seller_id = seller.seller_id
-		inner join goods on send.goods_id = goods.goods_id
-	ORDER BY created desc
+	<choose>
+	    <when test="isReal == true">
+			SELECT send.*, seller.company_name, goods.brand_name 
+			FROM send inner join seller on send.seller_id = seller.seller_id
+				inner join goods on send.goods_id = goods.goods_id
+		</when>
+		<otherwise>
+			SELECT testsend.*, seller.company_name, testgoods.brand_name 
+			FROM testsend inner join seller on testsend.seller_id = seller.seller_id
+				inner join testgoods on testsend.goods_id = testgoods.goods_id
+		</otherwise>
+	</choose>
+		ORDER BY created desc
 	<if test="page_size != 0">
 		LIMIT #{start_index}, #{page_size}
 	</if>
+	
 </select>
+
 <select id="countSendList" parameterType="SearchVO" resultType="Integer">
-	SELECT count(*) FROM send
-</select>
-
-<!-- 테스트 발송정보 저장 -->
-<insert id="insertTestSend" parameterType="SendVO">
-	INSERT INTO testsend(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
-		tr_id, userid, title, msg, status_code, result_code)
-	VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
-		#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code});
-</insert>
-
-<!-- 관리자화면: 테스트발송정보 리스트 가져오기 -->
-<select id="selectTestSendList" parameterType="SearchVO" resultType="SendVO">
-	SELECT testsend.*, seller.company_name, goods.brand_name 
-	FROM testsend inner join seller on testsend.seller_id = seller.seller_id
-		inner join goods on testsend.goods_id = goods.goods_id
-	ORDER BY created desc
-	<if test="page_size != 0">
-		LIMIT #{start_index}, #{page_size}
-	</if>
-</select>
-<select id="countTestSendList" parameterType="SearchVO" resultType="Integer">
-	SELECT count(*) FROM testsend
+	SELECT count(*) FROM 
+		<choose>
+	    <when test="isReal == true">
+			send
+		</when>
+		<otherwise>
+			testsend
+		</otherwise>
+	</choose>
 </select>
 
 </mapper>

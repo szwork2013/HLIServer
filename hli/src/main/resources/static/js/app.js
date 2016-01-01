@@ -38,9 +38,11 @@ app.config( ['$routeProvider', '$locationProvider', '$httpProvider', function ($
 	$routeProvider
 	.when('/manager', {templateUrl: '/templates/manager.html', controller: 'ManagerCtrl'})
 	.when('/goods', {templateUrl: '/templates/goods.html', controller: 'GoodsCtrl'})
+	.when('/testgoods', {templateUrl: '/templates/testgoods.html', controller: 'TestGoodsCtrl'})
 	.when('/provider', {templateUrl: '/templates/provider.html', controller: 'ProviderCtrl'})
 	.when('/seller', {templateUrl: '/templates/seller.html', controller: 'SellerCtrl'})
 	.when('/send', {templateUrl: '/templates/send.html', controller: 'SendCtrl'})
+	.when('/testsend', {templateUrl: '/templates/testsend.html', controller: 'TestSendCtrl'})
 	
 	//$locationProvider.html5Mode(false);
 	//$locationProvider.hashPrefix('!');
@@ -274,7 +276,53 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 	        	];
 
 	$scope.getGoodsList = function(){
-		GoodsSvc.getGoodsList({start_index:($scope.currentPageGoods - 1) * 10, page_size:10})
+		GoodsSvc.getGoodsList({start_index:($scope.currentPageGoods - 1) * 10, page_size:10, isReal: true})
+		.success(function(goodslist, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+			$scope.goodslist = goodslist.data;
+			$scope.totalGoodsListCount = goodslist.total;
+		}).error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
+
+	$scope.getGoodsList();
+
+	$scope.goodsListPageChanged = function() {
+		$scope.getGoodsList();
+	};
+	
+	$scope.viewDetail = function(goods) {
+		$scope.goods_name = goods.goods_name;
+		$scope.sell_price = goods.sell_price;
+		$scope.market_price = goods.market_price;
+		$scope.adj_price = goods.adj_price;
+		$scope.goods_code = goods.goods_code;
+		$scope.thumbnail = goods.thumbnail;
+		$scope.goods_info = goods.goods_info;
+		$scope.use_note = goods.use_note;
+		$scope.use_term = goods.use_term;
+	}
+
+}]);
+
+app.controller('TestGoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'GoodsSvc', function ($scope, $rootScope, $window, $cookieStore, GoodsSvc) {
+	$scope.goodslist = [];
+	
+	$scope.currentPageGoods = 1;
+	$scope.totalGoodsListCount = 0;
+	
+	$scope.providers = [
+	        		{code: 1, name: "M12"},
+	        		{code: 2, name: "Coup"}
+	        	];
+
+	$scope.getGoodsList = function(){
+		GoodsSvc.getGoodsList({start_index:($scope.currentPageGoods - 1) * 10, page_size:10, isReal: false})
 		.success(function(goodslist, status, headers) {
 			$rootScope.refreshToken(headers('X-Auth'));
 			$scope.goodslist = goodslist.data;
@@ -330,7 +378,7 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 
 
 	$scope.getSellerList = function(){
-		SellerSvc.getSellerList({start_index:($scope.currentPageSeller - 1) * 10, page_size:10})
+		SellerSvc.getSellerList({start_index:($scope.currentPageSeller - 1) * 10, page_size:10, isReal: false})
 		.success(function(sellers, status, headers) {
 			$rootScope.refreshToken(headers('X-Auth'));
 			$scope.sellers = sellers.data;
@@ -510,9 +558,8 @@ app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', '
 	$scope.currentPageSend = 1;
 	$scope.totalSendListCount = 0;
 
-
 	$scope.getSendList = function(){
-		SendSvc.getSendList({start_index:($scope.currentPageSend - 1) * 10, page_size:10})
+		SendSvc.getSendList({start_index:($scope.currentPageSend - 1) * 10, page_size:10, isReal:true})
 		.success(function(datas, status, headers) {
 			$rootScope.refreshToken(headers('X-Auth'));
 			$scope.sendList = datas.data;
@@ -531,20 +578,22 @@ app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', '
 	$scope.sendListPageChanged = function() {
 		$scope.getSendList();
 	};
-	
+
+}]);
+
+app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'SendSvc', function ($scope, $rootScope, $window, $cookieStore, SendSvc) {
 	//테스트발송-----------
-	$scope.testSendList = [];
+	$scope.sendList = [];
 	
-	$scope.currentPageTestSend = 1;
-	$scope.totalTestSendListCount = 0;
+	$scope.currentPageSend = 1;
+	$scope.totalSendListCount = 0;
 
-
-	$scope.getTestSendList = function(){
-		SendSvc.getTestSendList({start_index:($scope.currentPageTestSend - 1) * 10, page_size:10})
+	$scope.getSendList = function(){
+		SendSvc.getSendList({start_index:($scope.currentPageSend - 1) * 10, page_size:10, isReal:false})
 		.success(function(datas, status, headers) {
 			$rootScope.refreshToken(headers('X-Auth'));
-			$scope.testSendList = datas.data;
-			$scope.totalTestSendListCount = datas.total;
+			$scope.sendList = datas.data;
+			$scope.totalSendListCount = datas.total;
 		}).error(function(data, status) {
 			if (status == 401) {
 				$rootScope.logout();
@@ -554,10 +603,10 @@ app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', '
 		});
 	}
 
-	$scope.getTestSendList();
+	$scope.getSendList();
 
-	$scope.testSendListPageChanged = function() {
-		$scope.getTestSendList();
+	$scope.sendListPageChanged = function() {
+		$scope.getSendList();
 	};
 
 }]);

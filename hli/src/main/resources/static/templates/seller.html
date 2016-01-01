@@ -67,7 +67,7 @@
 			    			<td>상품명</td>
 			    			<td>가격</td>
 			    			<td>수수료</td>
-			    			<td>사용유무</td>
+			    			<!-- <td>사용유무</td> -->
 			    			<td>편집</td>
 			    		</tr>
 			    	</thead>
@@ -78,9 +78,9 @@
 						    <td>
 						    	<span editable-text="goods.commission" e-name="commission" e-form="rowform">{{ goods.commission}}</span>
 						    </td>
-						    <td>
+						    <!-- <td>
 						    	<span editable-select="goods.use_yn" e-name="use_yn" e-form="rowform" e-ng-options="s.value as s.text for s in use_yn">{{ use_yn[goods.use_yn].text}}</span>
-						    </td>
+						    </td> -->
 							<td style="white-space: nowrap">
 								<!-- form -->
 								<form editable-form name="rowform" onbeforesave="modifyMapSellerGoods($data, goods.seller_id, goods.goods_id)"

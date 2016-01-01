@@ -44,11 +44,21 @@ public class CouponController {
 	private RestTemplate restTemplate;
 	private MultiValueMap<String, String> params;
 	
-	//판매업체에게 상품을 공급해주는 REST API
+	//판매업체에게 상품을 공급해주는 REST API - 테스트상품
+	@RequestMapping("/api/dev/getAllGoodsOfSeller")
+    public ResultData<List<SellerGoodsVO>> getAllTestGoodsOfSeller(@RequestBody SellerVO inSeller, HttpServletRequest request) {
+		logger.debug("/api/dev/getAllGoodsOfSeller-----------------------------------------------");
+		return getAllGoodsOfSeller(inSeller, request, false);
+	}
+	
+	//판매업체에게 상품을 공급해주는 REST API - 실상품
 	@RequestMapping("/api/getAllGoodsOfSeller")
     public ResultData<List<SellerGoodsVO>> getAllGoodsOfSeller(@RequestBody SellerVO inSeller, HttpServletRequest request) {
-		logger.debug("/api/getAllGoodsOfSeller--------------------------------------------------");
-		
+		logger.debug("/api/getAllGoodsOfSeller---------------------------------------------------");
+		return getAllGoodsOfSeller(inSeller, request, true);
+	}
+	
+    private ResultData<List<SellerGoodsVO>> getAllGoodsOfSeller(SellerVO inSeller, HttpServletRequest request, boolean isReal) {
 		//판매업체 mid와 password가 일치하는지 확인
 		SellerVO seller = adminService.getSeller(inSeller);
 		if(seller == null) {
@@ -65,10 +75,12 @@ public class CouponController {
 		//상품리스트 가져오기
 		SearchVO search = new SearchVO();
 		search.setSeller_id(seller.getSeller_id());
+		search.setReal(isReal);  //실상품과 테스트 상품구분
 		List<SellerGoodsVO> goodsList = adminService.getAllGoodsOfSeller(search);
 		
 		return new ResultData<List<SellerGoodsVO>>(0, "success", goodsList);
 	}
+	
 	
 	//쿠폰 발송 OPEN API=====================================================================
 	// 테스트 발송
@@ -112,16 +124,17 @@ public class CouponController {
 		//상품 정보 확인
 		GoodsVO inGoods = new GoodsVO();
 		inGoods.setGoods_code(couponReq.getGoods_code());
+		inGoods.setReal(isReal); //실상품 or 테스트 상품 구분
 		GoodsVO goods = adminService.getGoods(inGoods);
 		if(goods == null) {
 			return new Result(400, "등록된 상품코드가 아닙니다.");
 		}
 		sendVO.setGoods_id(goods.getGoods_id());
+		//판매가격은 상품정보의 sell_price로 세팅. 판매업체에게 제공받지 않는다.
+		sendVO.setSell_price(goods.getSell_price());
 		
 		//발송정보 세팅
-		sendVO.setGoods_count(couponReq.getGoods_count());
-		sendVO.setSell_price(couponReq.getSell_price());
-		sendVO.setGoods_count(couponReq.getGoods_count());
+		sendVO.setGoods_count("1"); //상품 수량은 1로 고정
 		sendVO.setRecv_phone(couponReq.getRecv_phone());
 		sendVO.setSend_phone(couponReq.getSend_phone());
 		sendVO.setTr_id(couponReq.getTr_id());
@@ -135,12 +148,12 @@ public class CouponController {
 		//M12 handling
 		if (goods.getProvider() == 1) {
 			params.add("goods_code", couponReq.getGoods_code());
-			params.add("goods_count", couponReq.getGoods_count());
+			params.add("goods_count", sendVO.getGoods_count()); //상품 수량 1로 고정
 			params.add("send_phone", couponReq.getSend_phone());
 			params.add("recv_phone", couponReq.getRecv_phone());
 			params.add("tr_id", couponReq.getTr_id());
 			params.add("userid", "hlint");
-			params.add("sell_price", couponReq.getSell_price());
+			params.add("sell_price", sendVO.getSell_price()); //상품 판매가격으로 고정
 			params.add("msg", couponReq.getMessage());
 
 			if(isReal) {
@@ -231,10 +244,15 @@ public class CouponController {
 				logger.debug(rootNode.getName());
 				String resultCode = rootNode.getChild("RESULTCODE", rootNode.getNamespace()).getText();
 				String resultMsg = rootNode.getChild("RESULTMSG", rootNode.getNamespace()).getText();
+				String couponnumber = rootNode.getChild("COUPONNUMBER", rootNode.getNamespace()).getText();
+				String pinnumber = rootNode.getChild("PINNUMBER", rootNode.getNamespace()).getText();
 				
 				//쿠폰 발송 상태 저장
 				sendVO.setResult_code(resultCode);
 				sendVO.setStatus_code(resultMsg);
+				sendVO.setCouponnumber(couponnumber);
+				sendVO.setPinnumber(pinnumber);
+			
 				logger.debug(sendVO.toString());
 				if(isReal) {
 					adminService.addSend(sendVO);
