@@ -217,12 +217,12 @@ public class CouponController {
 			params.add("PASS", "hlint123");
 			params.add("COUPONCODE", couponReq.getGoods_code());
 			params.add("SEQNUMBER", couponReq.getTr_id());
-			params.add("QTY", couponReq.getGoods_count());
+			params.add("QTY", sendVO.getGoods_count());   //상품수량은 1개
 			params.add("HP", couponReq.getRecv_phone());
 			params.add("CALLBACK", couponReq.getSend_phone());
 			params.add("TITLE", "");
 			params.add("ADDMSG", couponReq.getMessage());
-			params.add("SELPRICE", couponReq.getSell_price());
+			params.add("SELPRICE", sendVO.getSell_price()); //상품 가격 세팅
 
 
 			//logger.debug(params.toString());
