@@ -10,6 +10,9 @@
         	<div class="panel panel-info">
 				<div class="panel-heading">
 					<i class="fa fa-list fa-lg"></i> 실 발송 목록
+					<div class="pull-right">
+						<button type="button" class="btn btn-default btn-xs" ng-csv="csvList" csv-header=csvHeader add-bom="U+FEFF" filename="발송목록.csv">엑셀 저장</button>
+					</div>
 				</div>
 				<table class="table table-striped">
 					<thead>

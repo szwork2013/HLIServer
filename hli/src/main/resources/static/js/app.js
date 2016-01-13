@@ -3,7 +3,7 @@ $(function() {
 });
 
 var app = angular.module('app', [
-    'ngRoute', 'ui.bootstrap', 'ngCookies', 'toaster', 'ngAnimate', "xeditable"
+    'ngRoute', 'ui.bootstrap', 'ngCookies', 'toaster', 'ngAnimate', "xeditable", "ngSanitize", "ngCsv"
 ]);
 
 app.run(['$rootScope', '$cookieStore', '$http', 'toaster', function($rootScope, $cookieStore, $http, toaster) {
@@ -554,6 +554,8 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'SendSvc', function ($scope, $rootScope, $window, $cookieStore, SendSvc) {
 	//실발송------------------
 	$scope.sendList = [];
+	$scope.csvList = [];
+	$scope.csvHeader=['발송시간', '판매업체', '상품명', '판매가격', '상품수량', 'tr_id', '수신자번호', '발송결과', '결과메시지'];
 	
 	$scope.currentPageSend = 1;
 	$scope.totalSendListCount = 0;
@@ -564,6 +566,20 @@ app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', '
 			$rootScope.refreshToken(headers('X-Auth'));
 			$scope.sendList = datas.data;
 			$scope.totalSendListCount = datas.total;
+			
+			angular.forEach($scope.sendList, function(send) {
+				$scope.csvList.push({created:"'"+send['created'], 
+					                 company_name:send['company_name'],
+					                 brand_name:send['brand_name'],
+									 sell_price:send['sell_price'],
+									 goods_count:send['goods_count'],
+									 tr_id:send['tr_id'],
+									 recv_phone:"'"+send['recv_phone'],
+									 result_code:send['result_code'],
+									 status_code:send['status_code']
+				});
+
+			});
 		}).error(function(data, status) {
 			if (status == 401) {
 				$rootScope.logout();
@@ -584,6 +600,8 @@ app.controller('SendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', '
 app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 'SendSvc', function ($scope, $rootScope, $window, $cookieStore, SendSvc) {
 	//테스트발송-----------
 	$scope.sendList = [];
+	$scope.csvList = [];
+	$scope.csvHeader=['발송시간', '판매업체', '상품명', '판매가격', '상품수량', 'tr_id', '수신자번호', '발송결과', '결과메시지'];
 	
 	$scope.currentPageSend = 1;
 	$scope.totalSendListCount = 0;
@@ -594,6 +612,21 @@ app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore
 			$rootScope.refreshToken(headers('X-Auth'));
 			$scope.sendList = datas.data;
 			$scope.totalSendListCount = datas.total;
+			
+			angular.forEach($scope.sendList, function(send) {
+				$scope.csvList.push({created:"'"+send['created'], 
+					                 company_name:send['company_name'],
+					                 brand_name:send['brand_name'],
+									 sell_price:send['sell_price'],
+									 goods_count:send['goods_count'],
+									 tr_id:send['tr_id'],
+									 recv_phone:"'"+send['recv_phone'],
+									 result_code:send['result_code'],
+									 status_code:send['status_code']
+				});
+
+			});
+			
 		}).error(function(data, status) {
 			if (status == 401) {
 				$rootScope.logout();
@@ -608,5 +641,5 @@ app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore
 	$scope.sendListPageChanged = function() {
 		$scope.getSendList();
 	};
-
+	
 }]);
