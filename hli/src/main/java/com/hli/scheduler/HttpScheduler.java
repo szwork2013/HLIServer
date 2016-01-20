@@ -135,7 +135,7 @@ public class HttpScheduler {
 		//보낼 데이터 설정
 		String url;
 		if (isReal) {
-			url = "http://v3api.inumber.co.kr/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
+			url = "http://v3api.inumber.co.kr/serviceapi.asmx/ServiceCouponList_02?CODE=hli&PASS=hli123&DOCCODE=057700";
 			return;
 		} else {
 			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
