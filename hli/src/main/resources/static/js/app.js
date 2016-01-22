@@ -404,7 +404,6 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		$scope.company_name = null;
 		$scope.mid = null;
 		$scope.password = null;
-		$scope.code = null;
 		$scope.person_name = null;
 		$scope.contact = null;
 		$scope.email = null;
@@ -424,7 +423,6 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 		$scope.company_name = seller.company_name;
 		$scope.mid = seller.mid;
 		$scope.password = seller.password;
-		$scope.code = seller.code;
 		$scope.person_name = seller.person_name;
 		$scope.contact = seller.contact;
 		$scope.email = seller.email;
@@ -438,7 +436,6 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 			mid: $scope.mid,
 			password: $scope.password,
 			mid: $scope.mid,
-			code: $scope.code,
 			person_name: $scope.person_name,
 			contact: $scope.contact,
 			email: $scope.email,
@@ -465,7 +462,6 @@ app.controller('SellerCtrl', ['$scope', '$rootScope', '$window', '$cookieStore',
 			company_name: $scope.company_name,
 			mid: $scope.mid,
 			password: $scope.password,
-			code: $scope.code,
 			person_name: $scope.person_name,
 			contact: $scope.contact,
 			email: $scope.email,

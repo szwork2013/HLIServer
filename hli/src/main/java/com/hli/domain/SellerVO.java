@@ -8,7 +8,7 @@ public class SellerVO {
 	private String company_name;  //판매업체 이름
 	private String mid;
 	private String password;
-	private String code;  //코드
+	//private String code;  //코드
 	private String person_name;  //담당자 이름
 	private String contact;  //담당자 연락처
 	private String email;  //담당자 이메일

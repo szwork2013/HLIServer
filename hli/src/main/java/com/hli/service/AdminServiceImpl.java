@@ -101,6 +101,7 @@ public class AdminServiceImpl implements AdminService {
 
 		
 		SearchVO search = new SearchVO();
+		search.setReal(true);
 		List<GoodsVO> goodsList = getGoodsList(search);
 		for(GoodsVO goods : goodsList) {
 			MapSellerGoodsVO mapVO = new MapSellerGoodsVO();
