@@ -192,7 +192,7 @@
 
 <select id="selectSellerList" parameterType="SearchVO" resultType="SellerVO">
 	SELECT 
-		seller_id, company_name, mid, password, code, person_name, contact,
+		seller_id, company_name, mid, password, person_name, contact,
 		email, allowed_ip, sale_status
 	FROM seller
 	ORDER BY company_name
