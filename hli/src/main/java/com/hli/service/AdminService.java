@@ -13,6 +13,7 @@ import com.hli.domain.SellerVO;
 import com.hli.domain.SendVO;
 
 public interface AdminService {
+	public int modifyGoodsCommission(GoodsVO goods);
 	public int addGoods(GoodsVO goods);
 	public int modifyGoods(GoodsVO goods);
 	public GoodsVO getGoods(GoodsVO goods);

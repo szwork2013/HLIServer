@@ -13,6 +13,7 @@ import com.hli.domain.SellerVO;
 import com.hli.domain.SendVO;
 
 public interface AdminMapper {
+	public int updateGoodsCommission(GoodsVO goods);
 	public int insertGoods(GoodsVO goods);
 	public int updateGoods(GoodsVO goods);
 	public GoodsVO selectGoods(GoodsVO goods);

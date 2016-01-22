@@ -21,6 +21,14 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private AdminMapper adminMapper;
+	
+	/**
+	 * 공급업체 수수료 수정
+	 */
+	@Override
+	public int modifyGoodsCommission(GoodsVO goods) {
+		return adminMapper.updateGoodsCommission(goods);
+	}
 
 	@Override
 	public int addGoods(GoodsVO goods) {

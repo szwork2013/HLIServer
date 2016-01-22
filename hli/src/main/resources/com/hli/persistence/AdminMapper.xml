@@ -3,6 +3,12 @@
 
 <mapper namespace="com.hli.persistence.AdminMapper">
 
+<update id="updateGoodsCommission" parameterType="GoodsVO">
+	UPDATE goods
+	updated = now(), commission=#{commission}
+	WHERE goods_id = #{goods_id} 
+</update>
+
 <insert id="insertGoods" parameterType="GoodsVO">
 	<choose>
 	    <when test="isReal == true">

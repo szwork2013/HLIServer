@@ -21,4 +21,5 @@ public class GoodsVO {
 	private String created;
 	private String updated;
 	private int use_yn; //0:사용, 1:미사용
+	private String commission; //수수료
 }
