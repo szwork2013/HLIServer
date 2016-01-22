@@ -136,7 +136,6 @@ public class HttpScheduler {
 		String url;
 		if (isReal) {
 			url = "http://v3api.inumber.co.kr/serviceapi.asmx/ServiceCouponList_02?CODE=0577&PASS=hli123&DOCCODE=0577000";
-			return;
 		} else {
 			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponList_02?CODE=0424&PASS=hlint123&DOCCODE=0424000";
 		}
@@ -226,7 +225,6 @@ public class HttpScheduler {
 		String url;
 		if(isReal) {
 			url = "http://v3api.inumber.co.kr/serviceapi.asmx/ServiceCouponInfo?CODE=0577&PASS=hli123&COUPONCODE=" + couponCode;
-			return;
 		} else {
 			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" + couponCode;
 		}
