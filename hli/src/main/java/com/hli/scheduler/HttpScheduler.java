@@ -225,7 +225,7 @@ public class HttpScheduler {
 		//보낼 데이터 설정
 		String url;
 		if(isReal) {
-			//상용 유알엘
+			url = "http://v3api.inumber.co.kr/serviceapi.asmx/ServiceCouponInfo?CODE=0577&PASS=hli123&COUPONCODE=" + couponCode;
 			return;
 		} else {
 			url = "http://issuev3apitest.m2i.kr:9999/serviceapi.asmx/ServiceCouponInfo?CODE=0424&PASS=hlint123&COUPONCODE=" + couponCode;
