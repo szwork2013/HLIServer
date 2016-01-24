@@ -17,7 +17,7 @@ import org.jdom.input.SAXBuilder;
 import org.junit.Test;
 
 public class JDomTest {
-	/*@Test
+	@Test
 	public void JdomTest() {
 		String xml =
 		"<?xml version=\"1.0\" encoding=\"euc-kr\"?>" + System.lineSeparator() + 
@@ -72,7 +72,7 @@ public class JDomTest {
 			System.out.println(jdomex.getMessage());
 		}
 
-	}*/
+	}
 	
 	@Test
 	public void JDomTest2() {
