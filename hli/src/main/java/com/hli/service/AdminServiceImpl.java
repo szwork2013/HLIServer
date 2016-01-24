@@ -46,7 +46,16 @@ public class AdminServiceImpl implements AdminService {
 		GoodsVO goods = getGoods(inGoods);
 		if(goods == null) {
 			//insert
-			adminMapper.insertGoods(inGoods);
+			int goods_id = adminMapper.insertGoods(inGoods);
+			//상품이 추가되면 판매업체의 map에도 추가한다.
+			List<SellerVO> sellerList = adminMapper.selectSellerList(new SearchVO());
+			for(SellerVO seller : sellerList) {
+				MapSellerGoodsVO vo = new MapSellerGoodsVO();
+				vo.setSeller_id(seller.getSeller_id());
+				vo.setCommission("5"); //5퍼센트로 고정
+				vo.setGoods_id(goods_id);
+				adminMapper.insertMapSellerGoods(vo);
+			}
 		} else {
 			//update
 			inGoods.setGoods_id(goods.getGoods_id());
