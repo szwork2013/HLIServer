@@ -254,9 +254,10 @@ public class CouponController {
 				//쿠폰 발송 상태 저장
 				sendVO.setResult_code(resultCode);
 				sendVO.setStatus_code(resultMsg);
-				sendVO.setCouponnumber(couponNumber);
-				sendVO.setPinnumber(pinNumber);
-			
+				if ("00".equals(resultCode)) {
+					sendVO.setCouponnumber(couponNumber);
+					sendVO.setPinnumber(pinNumber);
+				}
 				sendVO.setReal(isReal);
 				
 				logger.debug(sendVO.toString());
