@@ -20,6 +20,7 @@
 			    			<td>판매가격</td>
 			    			<td>업데이트</td>
 			    			<td>수수료(%)</td>
+			    			<td>수수료수정</td>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
@@ -29,7 +30,27 @@
 						    <td>{{ goods.brand_name}}</td>
 						    <td>{{ goods.sell_price}}</td>
 						    <td>{{ goods.updated}}</td>
-						    <td>{{ goods.commission}}</td>
+						    <td>
+								<span editable-text="goods.commission" e-name="commission" e-form="rowform">{{ goods.commission}}</span>
+						    </td>
+						    <td>
+								<form editable-form name="rowform" onbeforesave="modifyGoodsCommission($data, goods.goods_id)"
+									ng-show="rowform.$visible" class="form-buttons form-inline">
+									<button type="submit" ng-disabled="rowform.$waiting"
+										class="btn btn-default btn-xs">
+										<span class="glyphicon glyphicon-ok">저장</span>
+									</button>
+									<button type="button" ng-disabled="rowform.$waiting"
+										ng-click="rowform.$cancel()" class="btn btn-default btn-xs">
+										<span class="glyphicon glyphicon-remove">취소</span>
+									</button>
+								</form>
+								<div class="buttons" ng-show="!rowform.$visible">
+									<button class="btn btn-default btn-xs" ng-click="rowform.$show()">
+										<span class="glyphicon glyphicon-pencil">수정</span>
+									</button>
+								</div>
+						    </td>
 					    </tr>
 					    <tr>
 					    	<td colspan="7" style="text-align:center">

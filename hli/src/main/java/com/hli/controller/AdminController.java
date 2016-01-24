@@ -52,14 +52,6 @@ public class AdminController {
 		return new Result(0, "success");
 	}
 	
-	//실상품 수수료 업데이트
-	@RequestMapping("/admin/api/modifyGoodsCommission")
-	public Result modifyGoodsCommission(@RequestBody GoodsVO goods) {
-		adminService.modifyGoodsCommission(goods);
-		
-		return new Result(0, "success");
-	}
-	
 	//Coup 테스트상품 업데이트
 	@RequestMapping("/admin/api/getCoupGoodsListTest")
 	public Result getCoupGoodsListTest() {
@@ -72,6 +64,14 @@ public class AdminController {
 	@RequestMapping("/admin/api/getCoupGoodsList")
 	public Result getCoupGoodsList() {
 		scheduler.getProductOfCoupList(true);
+		
+		return new Result(0, "success");
+	}
+	
+	//실상품 수수료 업데이트
+	@RequestMapping("/admin/api/modifyGoodsCommission")
+	public Result modifyGoodsCommission(@RequestBody GoodsVO goods) {
+		adminService.modifyGoodsCommission(goods);
 		
 		return new Result(0, "success");
 	}

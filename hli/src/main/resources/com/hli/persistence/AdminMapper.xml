@@ -5,7 +5,8 @@
 
 <update id="updateGoodsCommission" parameterType="GoodsVO">
 	UPDATE goods
-	updated = now(), commission=#{commission}
+	SET
+		updated = now(), commission=#{commission}
 	WHERE goods_id = #{goods_id} 
 </update>
 
@@ -215,7 +216,7 @@
 </select>
 
 <select id="selectGoodsOfSeller" parameterType="SearchVO" resultType="MapSellerGoodsVO">
-	SELECT id, seller_id, commission, goods.goods_id, goods_name, sell_price
+	SELECT id, seller_id, map_seller_goods.commission, goods.goods_id, goods_name, sell_price
 	FROM map_seller_goods inner join goods on map_seller_goods.goods_id = goods.goods_id
 	WHERE map_seller_goods.seller_id = #{seller_id}
 	LIMIT #{start_index}, #{page_size}

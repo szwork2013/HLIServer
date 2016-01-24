@@ -75,6 +75,9 @@ app.service('GoodsSvc', function($http) {
 	this.getGoodsList = function(search) {
 		return $http.post('/admin/api/getGoodsList', search);
 	}
+	this.modifyGoodsCommission = function(goods) {
+		return $http.post('/admin/api/modifyGoodsCommission', goods);
+	}
 });
 
 app.service('SellerSvc', function($http) {
@@ -306,6 +309,21 @@ app.controller('GoodsCtrl', ['$scope', '$rootScope', '$window', '$cookieStore', 
 		$scope.goods_info = goods.goods_info;
 		$scope.use_note = goods.use_note;
 		$scope.use_term = goods.use_term;
+	}
+
+	$scope.modifyGoodsCommission = function(data, goods_id) {
+		data.goods_id = goods_id;
+
+		GoodsSvc.modifyGoodsCommission(data)
+		.success(function(datas, status, headers) {
+			$rootScope.refreshToken(headers('X-Auth'));
+		}).error(function(data,status){
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
 	}
 
 }]);
