@@ -1,5 +1,7 @@
 package com.hli.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 @Data
@@ -24,4 +26,6 @@ public class SendVO {
 	
 	private String company_name;
 	private String brand_name;
+	@JsonProperty
+	private boolean isReal;
 }

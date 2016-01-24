@@ -196,12 +196,10 @@ public class CouponController {
 				//쿠폰 발송 상태 저장
 				sendVO.setResult_code(resultCode);
 				sendVO.setStatus_code(statusCode);
+				
+				sendVO.setReal(isReal);
 				logger.debug(sendVO.toString());
-				if(isReal) {
-					adminService.addSend(sendVO);
-				} else {
-					adminService.addTestSend(sendVO);
-				}
+				adminService.addSend(sendVO);
 				
 				return new Result(Integer.parseInt(resultCode), statusCode);
 			}
@@ -227,7 +225,7 @@ public class CouponController {
 
 			//logger.debug(params.toString());
 			if(isReal) {
-				//
+				baseUrl = "http://v3api.inumber.co.kr/serviceapi_02.asmx/ServiceCreateSendMuch";
 			} else {
 				baseUrl = "http://issuev3apitest.m2i.kr:9999/serviceapi_02.asmx/ServiceCreateSendMuch";
 			}
@@ -253,12 +251,9 @@ public class CouponController {
 				//sendVO.setCouponnumber(couponnumber);
 				//sendVO.setPinnumber(pinnumber);
 			
+				sendVO.setReal(isReal);
 				logger.debug(sendVO.toString());
-				if(isReal) {
-					adminService.addSend(sendVO);
-				} else {
-					adminService.addTestSend(sendVO);
-				}
+				adminService.addSend(sendVO);
 				
 				return new Result(Integer.parseInt(resultCode), resultMsg);
 			} 
