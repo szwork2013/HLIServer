@@ -244,17 +244,18 @@ public class CouponController {
 				String resultCode = rootNode.getChild("RESULTCODE", rootNode.getNamespace()).getText();
 				String resultMsg = rootNode.getChild("RESULTMSG", rootNode.getNamespace()).getText();
 				
-				Element List = rootNode.getChild("LIST", rootNode.getNamespace());
-				List couponList = List.getChildren("GCOUPONLIST", rootNode.getNamespace());
-				//한건만 보내므로 루프를 돌리지않고 한건만 저장
-				Element node = (Element) couponList.get(0);
-				String couponNumber = node.getChildText("COUPONNUMBER", rootNode.getNamespace());
-				String pinNumber = node.getChildText("PINNUMBER", rootNode.getNamespace());
-				
 				//쿠폰 발송 상태 저장
 				sendVO.setResult_code(resultCode);
 				sendVO.setStatus_code(resultMsg);
+				
+				//쿠폰번호와 핀번호 저장
 				if ("00".equals(resultCode)) {
+					Element List = rootNode.getChild("LIST", rootNode.getNamespace());
+					List couponList = List.getChildren("GCOUPONLIST", rootNode.getNamespace());
+					//한건만 보내므로 루프를 돌리지않고 한건만 저장
+					Element node = (Element) couponList.get(0);
+					String couponNumber = node.getChildText("COUPONNUMBER", rootNode.getNamespace());
+					String pinNumber = node.getChildText("PINNUMBER", rootNode.getNamespace());
 					sendVO.setCouponnumber(couponNumber);
 					sendVO.setPinnumber(pinNumber);
 				}
