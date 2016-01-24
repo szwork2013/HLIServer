@@ -253,7 +253,7 @@
 		</when>
 		<otherwise>
 			INSERT INTO testsend(seller_id, goods_id, goods_count, sell_price, recv_phone, send_phone, 
-				tr_id, userid, title, msg, status_code, result_code, couponnumber, pinnumber
+				tr_id, userid, title, msg, status_code, result_code, couponnumber, pinnumber)
 			VALUES(#{seller_id}, #{goods_id}, #{goods_count}, #{sell_price}, #{recv_phone}, #{send_phone}, 
 				#{tr_id}, #{userid}, #{title}, #{msg}, #{status_code}, #{result_code}, #{couponnumber}, #{pinnumber});
 		</otherwise>
