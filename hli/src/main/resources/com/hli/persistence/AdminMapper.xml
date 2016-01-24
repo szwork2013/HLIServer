@@ -11,13 +11,16 @@
 </update>
 
 <insert id="insertGoods" parameterType="GoodsVO" useGeneratedKeys="true" keyProperty="goods_id" keyColumn="goods_id">
-	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, adj_price, goods_info, use_note, use_term, updated) 
-	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{adj_price}, #{goods_info}, #{use_note}, #{use_term}, now());
-</insert>
-
-<insert id="insertTestGoods" parameterType="GoodsVO" useGeneratedKeys="true" keyProperty="goods_id" keyColumn="goods_id">
-	INSERT INTO testgoods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, adj_price, goods_info, use_note, use_term, updated) 
-	values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{adj_price}, #{goods_info}, #{use_note}, #{use_term}, now());
+	<choose>
+	    <when test="isReal == true">
+	    	INSERT INTO goods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, adj_price, goods_info, use_note, use_term, updated) 
+			values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{adj_price}, #{goods_info}, #{use_note}, #{use_term}, now());
+	    </when>
+	    <otherwise>
+			INSERT INTO testgoods(provider, brand_name, goods_name, goods_code, thumbnail, market_price, sell_price, adj_price, goods_info, use_note, use_term, updated) 
+			values(#{provider}, #{brand_name}, #{goods_name}, #{goods_code}, #{thumbnail}, #{market_price}, #{sell_price}, #{adj_price}, #{goods_info}, #{use_note}, #{use_term}, now());
+	    </otherwise>
+    </choose>
 </insert>
 
 <update id="updateGoods" parameterType="GoodsVO">

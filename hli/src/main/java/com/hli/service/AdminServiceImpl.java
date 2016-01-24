@@ -42,18 +42,19 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void saveGoods(GoodsVO inGoods) {
-		System.out.println("saveGoods:" + inGoods);
+		//System.out.println("saveGoods:" + inGoods);
 		GoodsVO goods = getGoods(inGoods);
 		if(goods == null) {
 			//insert
-			int goods_id = adminMapper.insertGoods(inGoods);
+			adminMapper.insertGoods(inGoods);
 			//상품이 추가되면 판매업체의 map에도 추가한다.
+			//inGoods에 자동 증가된 goods_id 키값이 들어가 있다.
 			List<SellerVO> sellerList = adminMapper.selectSellerList(new SearchVO());
 			for(SellerVO seller : sellerList) {
 				MapSellerGoodsVO vo = new MapSellerGoodsVO();
 				vo.setSeller_id(seller.getSeller_id());
 				vo.setCommission("5"); //5퍼센트로 고정
-				vo.setGoods_id(goods_id);
+				vo.setGoods_id(inGoods.getGoods_id());
 				adminMapper.insertMapSellerGoods(vo);
 			}
 		} else {

@@ -106,10 +106,6 @@ public class HttpScheduler {
 								goodsList.put(couponCode, null);
 							}
 							
-							for(String coupon : goodsList.keySet()) {
-								System.out.println("coupon code:" + coupon);
-							}
-							
 							for(String couponCode : goodsList.keySet()) {
 								if(isReal) {
 									getProductOfCoup(couponCode, true);
@@ -171,7 +167,7 @@ public class HttpScheduler {
 				if (msg instanceof HttpContent) {
 					HttpContent content = (HttpContent) msg;
 					String strContent = content.content().toString(CharsetUtil.UTF_8);
-					System.out.println("content:" + strContent);
+					//System.out.println("content:" + strContent);
 					
 					try {
 						InputStream in = new ByteArrayInputStream(strContent.getBytes("utf-8"));
@@ -203,7 +199,7 @@ public class HttpScheduler {
 								goods.setReal(false);
 							}
 							
-							System.out.println("goods:" + goods);
+							//System.out.println("goods:" + goods);
 							
 							adminService.saveGoods(goods);
 						} 
@@ -278,7 +274,7 @@ public class HttpScheduler {
 						Document document = (Document) builder.build(in);
 						Element rootNode = document.getRootElement();
 						List list = rootNode.getChildren("ITEM");
-						System.out.println("list size()" + list.size());
+						//System.out.println("list size()" + list.size());
 
 						for (int i = 0; i < list.size(); i++) {
 							Element node = (Element) list.get(i);
@@ -294,7 +290,7 @@ public class HttpScheduler {
 							goods.setGoods_info(node.getChildText("GOODS_INFO"));
 							goods.setReal(isReal);
 
-							System.out.println("goods:" + goods);
+							//System.out.println("goods:" + goods);
 
 							adminService.saveGoods(goods);
 							Thread.sleep(100);
