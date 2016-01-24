@@ -236,10 +236,11 @@ public class CouponController {
 				String strResult = restTemplate.getForObject(
 						uriComponents.toUriString(),
 						String.class);
+				logger.debug("strResult:" + strResult);
 				SAXBuilder builder = new SAXBuilder();
 				Document document = (Document) builder.build(new StringReader(strResult));
 				Element rootNode = document.getRootElement();
-				logger.debug(rootNode.getName());
+				
 				String resultCode = rootNode.getChild("RESULTCODE", rootNode.getNamespace()).getText();
 				String resultMsg = rootNode.getChild("RESULTMSG", rootNode.getNamespace()).getText();
 				//String couponnumber = rootNode.getChild("COUPONNUMBER", rootNode.getNamespace()).getText();
