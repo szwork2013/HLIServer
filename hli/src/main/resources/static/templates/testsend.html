@@ -28,6 +28,7 @@
 			    			<td>결과메시지</td>
 			    			<td>쿠폰번호</td>
 			    			<td>핀번호</td>
+			    			<td>재발송</td>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
@@ -43,9 +44,14 @@
 			    			<td>{{send.status_code}}</td>
 			    			<td>{{send.couponnumber}}</td>
 			    			<td>{{send.pinnumber}}</td>
+			    			<td>
+			    				<button class="btn btn-default btn-xs" ng-click="resend(send)">
+						        	<span class="glyphicon glyphicon-pencil"></span> 재발송
+						        </button>
+			    			</td>
 					    </tr>
 					    <tr>
-					    	<td colspan="11" style="text-align:center">
+					    	<td colspan="12" style="text-align:center">
 					    		<pagination boundary-links="true" total-items="totalSendListCount" ng-model="currentPageSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="sendListPageChanged()"></pagination>
 					    	</td>
 					    </tr>

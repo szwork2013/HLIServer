@@ -615,7 +615,7 @@ app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore
 	//테스트발송-----------
 	$scope.sendList = [];
 	$scope.csvList = [];
-	$scope.csvHeader=['발송시간', '판매업체', '상품명', '판매가격', '상품수량', 'tr_id', '수신자번호', '발송결과', '결과메시지'];
+	$scope.csvHeader=['발송시간', '판매업체', '상품명', '판매가격', '상품수량', 'tr_id', '수신자번호', '발송결과', '결과메시지', '쿠폰번호', '핀번호'];
 	
 	$scope.currentPageSend = 1;
 	$scope.totalSendListCount = 0;
@@ -636,7 +636,9 @@ app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore
 									 tr_id:send['tr_id'],
 									 recv_phone:"'"+send['recv_phone'],
 									 result_code:send['result_code'],
-									 status_code:send['status_code']
+									 status_code:send['status_code'],
+									 couponnumber:"'"+send['couponnumber'],
+									 pinnumber:"'"+send['pinnumber']
 				});
 
 			});
