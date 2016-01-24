@@ -26,6 +26,8 @@
 			    			<td>수신자번호</td>
 			    			<td>발송결과</td>
 			    			<td>결과메시지</td>
+			    			<td>쿠폰번호</td>
+			    			<td>핀번호</td>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
@@ -39,9 +41,11 @@
 			    			<td>{{send.recv_phone}}</td>
 			    			<td>{{send.result_code}}</td>
 			    			<td>{{send.status_code}}</td>
+			    			<td>{{send.couponnumber}}</td>
+			    			<td>{{send.pinnumber}}</td>
 					    </tr>
 					    <tr>
-					    	<td colspan="9" style="text-align:center">
+					    	<td colspan="11" style="text-align:center">
 					    		<pagination boundary-links="true" total-items="totalSendListCount" ng-model="currentPageSend" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="sendListPageChanged()"></pagination>
 					    	</td>
 					    </tr>
