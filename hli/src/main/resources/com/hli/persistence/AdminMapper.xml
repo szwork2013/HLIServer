@@ -60,7 +60,7 @@
 		</otherwise>
 	</choose>
 	<choose>
-		<when test != "goods_code">
+		<when test = "goods_code != null">
 			WHERE goods_code = #{goods_code}
 		</when>
 		<otherwise>
