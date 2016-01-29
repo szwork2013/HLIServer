@@ -86,18 +86,32 @@ public class CouponController {
 	// 테스트 발송
 	@RequestMapping("/dev/api/sendCoupon")
 	public Result testSendCoupon(@RequestBody CouponReqVO couponReq, HttpServletRequest request) {
+		logger.debug("/dev/api/sendCoupon---------------------------------------------------");
 		return send(couponReq, request, false);
 	}
 	// 실 발송
 	@RequestMapping("/api/sendCoupon")
 	public Result SendCoupon(@RequestBody CouponReqVO couponReq, HttpServletRequest request) {
+		logger.debug("/api/sendCoupon---------------------------------------------------");
 		return send(couponReq, request, true);
+	}
+	
+	//쿠폰 재발송 OPEN API=====================================================================
+	// 테스트 재발송
+	@RequestMapping("/dev/api/resendCoupon")
+	public Result testReSendCoupon(@RequestBody SendVO sendReq, HttpServletRequest request) {
+		logger.debug("/dev/api/resendCoupon---------------------------------------------------");
+		return resend(sendReq, request, false);
+	}
+	// 실 재발송
+	@RequestMapping("/api/resendCoupon")
+	public Result ReSendCoupon(@RequestBody SendVO sendReq, HttpServletRequest request) {
+		logger.debug("/api/resendCoupon---------------------------------------------------");
+		return resend(sendReq, request, true);
 	}
 	
 	
 	public Result send(CouponReqVO couponReq, HttpServletRequest request, boolean isReal) {
-		logger.debug("//dev/api/sendCoupon------------------------------------------------------------");
-		
 		SendVO sendVO = new SendVO();
 		
 		if(couponReq.getMid() == null || couponReq.getPassword() == null) {
@@ -209,7 +223,7 @@ public class CouponController {
 				return new Result(500, "내부 오류가 발생하였습니다.");
 			}
 		}
-		//Coup handling
+		//Coup handling, 문서 2.18 구현 
 		else if (goods.getProvider() == 2) {
 			params.add("CODE", "0424");
 			params.add("PASS", "hlint123");
@@ -263,6 +277,93 @@ public class CouponController {
 				
 				logger.debug(sendVO.toString());
 				adminService.addSend(sendVO);
+				
+				return new Result(Integer.parseInt(resultCode), resultMsg);
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+				return new Result(100, "Coupon failed");
+			}
+
+		}
+
+		return new Result(500, "내부 오류가 발생하였습니다.");
+	}
+	
+	//재발송 로직, 
+	public Result resend(SendVO sendReq, HttpServletRequest request, boolean isReal) {
+		//상품정보와 거래번호를 받아서 나머지 정보를 세팅한다.
+		SendVO sendVO = new SendVO();
+		
+		//상품 정보 확인
+		GoodsVO inGoods = new GoodsVO();
+		inGoods.setGoods_id(sendReq.getGoods_id());
+		inGoods.setReal(isReal); //실상품 or 테스트 상품 구분
+		GoodsVO goods = adminService.getGoods(inGoods);
+
+		sendVO.setGoods_id(goods.getGoods_id());
+		sendVO.setSell_price(goods.getSell_price());
+		
+		//발송정보 세팅
+		sendVO.setGoods_count("1"); //상품 수량은 1로 고정
+		sendVO.setRecv_phone(sendReq.getRecv_phone());
+		sendVO.setSend_phone(sendReq.getSend_phone());
+		sendVO.setTr_id(sendReq.getTr_id());
+		sendVO.setMsg(sendReq.getMsg());
+
+		restTemplate = new RestTemplate();
+		params = new LinkedMultiValueMap<String, String>();
+		UriComponents uriComponents;
+		String baseUrl = "";
+		
+		//M12 handling, 아직 재발행 로직 없음
+		if (goods.getProvider() == 1) {
+			
+		}
+		//Coup handling, 쿠프 문서 2.33 거래번호로 재발송
+		else if (goods.getProvider() == 2) {
+			params.add("CODE", "0424");
+			params.add("PASS", "hlint123");
+			params.add("COUPONCODE", goods.getGoods_code());
+			params.add("SEQNUMBER", sendReq.getTr_id());
+			//params.add("QTY", sendVO.getGoods_count());   //상품수량은 1개
+			params.add("HP", sendReq.getRecv_phone());
+			params.add("CALLBACK", sendReq.getSend_phone());
+			params.add("TITLE", "");
+			params.add("ADDMSG", sendReq.getMsg());
+			//params.add("SELPRICE", goods.getSell_price()); //상품 가격 세팅
+
+			//logger.debug(params.toString());
+			if(isReal) {
+				baseUrl = "http://v3api.inumber.co.kr/ServiceApi.aspx/ServiceCouponSendSeq";
+			} else {
+				baseUrl = "http://issuev3apitest.m2i.kr:9999/ServiceApi.aspx/ServiceCouponSendSeq";
+			}
+			
+			try {
+				uriComponents = UriComponentsBuilder.fromHttpUrl(baseUrl).queryParams(params).build();
+				logger.debug(uriComponents.toUriString());
+				String strResult = restTemplate.getForObject(
+						uriComponents.toUriString(),
+						String.class);
+				logger.debug("strResult:" + strResult);
+				SAXBuilder builder = new SAXBuilder();
+				Document document = (Document) builder.build(new StringReader(strResult));
+				Element rootNode = document.getRootElement();
+				
+				String resultCode = rootNode.getChild("RESULTCODE", rootNode.getNamespace()).getText();
+				String resultMsg = rootNode.getChild("RESULTMSG", rootNode.getNamespace()).getText();
+				
+				//쿠폰 발송 상태 저장
+				sendVO.setResult_code(resultCode);
+				sendVO.setStatus_code(resultMsg);
+				
+				//재발송여부 저장
+				
+				sendVO.setReal(isReal);
+				
+				logger.debug(sendVO.toString());
+				//adminService.addSend(sendVO);
 				
 				return new Result(Integer.parseInt(resultCode), resultMsg);
 			} 

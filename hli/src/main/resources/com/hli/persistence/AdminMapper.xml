@@ -59,8 +59,15 @@
 			SELECT * FROM testgoods 
 		</otherwise>
 	</choose>
+	<choose>
+		<when test != "goods_code">
+			WHERE goods_code = #{goods_code}
+		</when>
+		<otherwise>
+			WHERE goods_id = #{goods_id}
+		</otherwise>
+	</choose>
 	
-	WHERE goods_code = #{goods_code}
 	Limit 1
 </select>
 
