@@ -105,9 +105,17 @@ app.service('SendSvc', function($http) {
 	this.getSendList = function(search) {
 		return $http.post('/admin/api/getSendList', search);
 	}
+
+	this.resend = function(sendReq) {
+		return $http.post('/api/resendCoupon', sendReq);
+	}
 	
 	this.getTestSendList = function(search) {
 		return $http.post('/admin/api/getTestSendList', search);
+	}
+
+	this.testResend = function(sendReq) {
+		return $http.post('/dev/api/resendCoupon', sendReq);
 	}
 });
 
@@ -657,5 +665,19 @@ app.controller('TestSendCtrl', ['$scope', '$rootScope', '$window', '$cookieStore
 	$scope.sendListPageChanged = function() {
 		$scope.getSendList();
 	};
+
+	$scope.resend = function(sendReq) {
+		SendSvc.testResend(sendReq)
+		.success(function(datas, status, headers) {
+
+		})
+		.error(function(data, status) {
+			if (status == 401) {
+				$rootScope.logout();
+			} else {
+				alert("error : " + data.message);
+			}
+		});
+	}
 	
 }]);
